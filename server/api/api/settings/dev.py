@@ -13,3 +13,7 @@ INTERNAL_IPS = (
     "localhost",
     "127.0.0.1"
 )
+
+# Email
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = BASE_DIR / "mail"

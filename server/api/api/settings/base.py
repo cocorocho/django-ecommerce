@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Added another parent because settings are under settings dir
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -40,7 +41,10 @@ INSTALLED_APPS = [
     # Libraries
     "rest_framework",
     "rest_framework.authtoken",
-    "dj_rest_auth"
+    "djoser",
+    # Apps
+    "core",
+    "accounts",
 ]
 
 MIDDLEWARE = [
@@ -58,7 +62,10 @@ ROOT_URLCONF = 'api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            # BASE_DIR / "templates",
+            # BASE_DIR / "accounts" / "templates"
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,3 +132,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+# USERS
+AUTH_USER_MODEL = "accounts.User"
+
+DJOSER = {
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_URL": "recover/{uid}/{token}/", # TODO add frontend url
+    "EMAIL": {
+        "password_reset": "accounts.email.PasswordResetEmail"
+    }
+}
