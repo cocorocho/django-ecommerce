@@ -2,7 +2,6 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 
 from rest_framework.reverse import reverse
-from rest_framework.authtoken.models import Token
 from model_bakery import baker
 
 
@@ -27,11 +26,10 @@ class TestAuthentication(TestCase):
         }
         response = self.client.post(URL, payload)
         self.assertEqual(response.status_code, 200)
-        token = response.json()["auth_token"]
 
-        self.assertTrue(
-            Token.objects.filter(key=token, user=user).exists()
-        )
+        # self.assertTrue(
+        #     Token.objects.filter(key=token, user=user).exists()
+        # )
 
     def test_login_with_username_returns_http400(self) -> None:
         """
@@ -49,7 +47,7 @@ class TestAuthentication(TestCase):
         }
         response = self.client.post(URL, payload)
         self.assertEqual(response.status_code, 400)
-        self.assertFalse(Token.objects.filter(user=user).exists())
+        # self.assertFalse(Token.objects.filter(user=user).exists())
 
     def test_logout(self) -> None:
         """
@@ -67,16 +65,13 @@ class TestAuthentication(TestCase):
             "password": user_password
         }
         response = self.client.post(URL, payload)
-        self.assertTrue(Token.objects.filter(user=user).exists())
-        token = response.json()["auth_token"]
+        self.assertEqual(response.status_code, 200)
 
         # Perform logout, token should be deleted
         URL = reverse("accounts:logout")
-        headers = {"Authorization": f"Token {token}"}
-        response = self.client.post(URL, headers=headers) # type: ignore
+        response = self.client.post(URL) # type: ignore
         
         self.assertEqual(response.status_code, 204)        
-        self.assertFalse(Token.objects.filter(user=user).exists())
 
     def test_change_password(self) -> None:
         """
@@ -88,7 +83,6 @@ class TestAuthentication(TestCase):
         user.set_password(current_password)
         user.save()
 
-        token = Token.objects.create(user=user)
         new_password = "verystrongnewpassword"
 
         payload = {
@@ -96,8 +90,8 @@ class TestAuthentication(TestCase):
             "re_new_password": new_password,
             "current_password": current_password
         }
-        headers = {"Authorization": f"Token {token}"}
-        response = self.client.post(URL, payload, headers=headers) # type: ignore
+        self.client.force_login(user)
+        response = self.client.post(URL, payload) # type: ignore
         self.assertEqual(response.status_code, 204)
 
         user.refresh_from_db()

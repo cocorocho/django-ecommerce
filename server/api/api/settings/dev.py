@@ -14,6 +14,9 @@ INTERNAL_IPS = (
     "127.0.0.1"
 )
 
+# CORS
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "mail"

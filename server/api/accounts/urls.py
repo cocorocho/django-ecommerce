@@ -1,7 +1,9 @@
-from django.urls import path, include
+from django.urls import path
 
 from rest_framework.routers import DefaultRouter
-from djoser.views import TokenCreateView, TokenDestroyView, UserViewSet
+from djoser.views import UserViewSet
+
+from accounts.views import LoginView, LogoutView
 
 
 router = DefaultRouter()
@@ -18,7 +20,7 @@ DJOSER_REQUIRED_ENDPOINTS = (
 app_name = "accounts"
 
 urlpatterns = [
-    path("login/", TokenCreateView.as_view(), name="login"),
-    path("logout/", TokenDestroyView.as_view(), name="logout"),
+    path("signin/", LoginView.as_view(), name="login"),
+    path("signout/", LogoutView.as_view(), name="logout"),
     *[url for url in router.urls if url.name in DJOSER_REQUIRED_ENDPOINTS]
 ]

@@ -13,6 +13,7 @@ class TestUsersEndpoints(TestCase):
         URL = reverse("accounts:accounts-list")
         user = baker.make(get_user_model())
 
+        self.client.force_login(user)
         response = self.client.get(URL)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 404)
         

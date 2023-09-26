@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Libraries
+    "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -135,7 +137,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        "rest_framework.authentication.SessionAuthentication",
     ),
 }
 
@@ -147,5 +150,13 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "recover/{uid}/{token}/", # TODO add frontend url
     "EMAIL": {
         "password_reset": "accounts.email.PasswordResetEmail"
+    },
+    "PERMISSIONS": {
+        "user_list": ["rest_framework.permissions.IsAdminUser"]
     }
 }
+
+
+# AUTH
+SESSION_COOKIE_HTTPONLY = True
+CORS_ALLOW_CREDENTIALS = True
