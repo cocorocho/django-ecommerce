@@ -147,7 +147,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 DJOSER = {
     "USER_CREATE_PASSWORD_RETYPE": True,
-    "PASSWORD_RESET_CONFIRM_URL": "recover/{uid}/{token}/", # TODO add frontend url
+    "PASSWORD_RESET_CONFIRM_URL": "account/recover/{uid}/{token}/", # TODO add frontend url
     "EMAIL": {
         "password_reset": "accounts.email.PasswordResetEmail"
     },
@@ -155,7 +155,6 @@ DJOSER = {
         "user_list": ["rest_framework.permissions.IsAdminUser"]
     }
 }
-
 
 # AUTH
 SESSION_COOKIE_HTTPONLY = True
