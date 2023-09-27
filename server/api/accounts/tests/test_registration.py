@@ -59,10 +59,15 @@ class TestPasswordRecovery(TestCase):
         self.assertEqual(response.status_code, 204) # Password reset email is sent
 
         # Get UID and Token from email body
-        pattern = r"\/(.+)\/"
+        pattern = r"\/([^\/]+)\/([^\/]+)\/$"
 
         mail_body = mail.outbox[0].body
-        uid, token = re.findall(pattern, mail_body)[0].split("/")
+        search = re.search(pattern, mail_body)
+
+        if not search:
+            raise Exception("Email not found")
+        
+        uid, token = search.group(1), search.group(2)
 
         # Perform password reset operation
         URL = reverse("accounts:accounts-reset-password-confirm")
