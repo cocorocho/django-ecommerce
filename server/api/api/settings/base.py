@@ -43,9 +43,12 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",
+    "django_jsonform",
     # Apps
     "core",
     "accounts",
+    "products",
+    "store",
 ]
 
 MIDDLEWARE = [
