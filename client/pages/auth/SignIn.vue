@@ -1,0 +1,75 @@
+<template>
+  <div class="container mx-auto">
+    <LayoutFormContainer
+      :header="$t('authentication.signIn')"
+    >
+    <FormkitForm
+        type="form"
+        :submit-label="$t('authentication.signIn')"
+        @submit="submitForm"
+      >
+        <FormKit
+          type="email"
+          name="email"
+          id="email"
+          :label="$t('authentication.email')"
+          required
+        />
+
+        <FormKit
+          type="password"
+          name="password"
+          id="password"
+          :label="$t('authentication.password')"
+          required
+        />
+      </FormkitForm>
+      <div class="pt-6 text-sm">
+        <div>
+          {{ $t('authentication.message.forgotYourPassword') }}
+          <NuxtLink :to="{name: 'recover'}">
+            {{ $t("authentication.resetPassword") }}
+          </NuxtLink>
+        </div>
+        <div>
+          {{ $t('authentication.message.dontHaveAnAccount') }}
+          <NuxtLink :to="{name: 'signup'}">
+            {{ $t('authentication.signUp') }}
+          </NuxtLink>
+        </div>
+      </div>
+    </LayoutFormContainer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useAuthStore } from "~/store/auth"
+
+definePageMeta({
+  path: "/signin/",
+  name: "signin"
+});
+
+const { signInUser, isAuthenticated } = useAuthStore();
+
+if (isAuthenticated) {
+  await navigateTo("/")
+}
+
+const submitForm = async (formData: ISignIn, node: any) => {
+  try {
+    await signInUser(formData);
+  } catch (error: any) {
+    console.log(error)
+    if (error?.response?._data) {
+      node.setErrors(error.response._data?.non_field_errors, error.response._data);
+    }
+  }
+}
+</script>
+
+<style scoped>
+.container:deep(input) {
+  width: 100%;
+}
+</style>

@@ -1,0 +1,23 @@
+{
+  "authentication": {
+    "account": "Account",
+    "accountLogin": "Account Login",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "resetPassword": "Reset Password",
+    "message": {
+      "alreadyHaveAccount": "Already have an account?",
+      "dontHaveAnAccount": "Don't have an account?",
+      "forgotYourPassword": "Forgot your password?",
+      "recoverYourAccount": "Recover Your Account",
+      "newUser": "New User?",
+      "emailResetSuccess": "If the entered email is associated with an account, an email has been sent with instructions of how to reset your password"
+    }
+  }
+}
