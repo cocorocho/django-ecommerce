@@ -20,10 +20,12 @@
     "eslint": "^8.50.0",
     "eslint-plugin-vue": "^9.17.0",
     "nuxt": "^3.7.3",
+    "nuxt-icon": "^0.5.0",
     "tailwindcss": "^3.3.3"
   },
   "dependencies": {
     "@formkit/nuxt": "^1.1.0",
+    "@nuxt/image": "^1.0.0-rc.2",
     "@pinia/nuxt": "^0.4.11",
     "pinia": "^2.1.6",
     "zod": "^3.22.2"

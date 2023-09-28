@@ -1,11 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: [
     "@nuxtjs/eslint-module",
+    "@nuxt/image",
     "@nuxtjs/i18n",
     "@formkit/nuxt",
-    "@pinia/nuxt"
+    "@pinia/nuxt",
+    "nuxt-icon"
   ],
   css: ["~/assets/css/main.css"],
   postcss: {
@@ -16,7 +18,12 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiURL: "http://localhost:8000"
+      apiURL: process.env.API_URL || "http://localhost:8000"
     }
+  },
+  image: {
+    domains: [
+      process.env.API_URL || "http://localhost:8000",
+    ]
   }
 })
