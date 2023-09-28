@@ -161,3 +161,4 @@ cython_debug/
 
 # Ignore filebased email logs for on dev
 mail
+media
