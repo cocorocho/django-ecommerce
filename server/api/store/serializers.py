@@ -24,7 +24,7 @@ class CategoryProductsSerializer(serializers.ModelSerializer):
 class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
-        fields = ("name", "slug")
+        fields = ("name", "slug", "thumbnail")
 
 
 class StoreCategorySerializer(serializers.ModelSerializer):

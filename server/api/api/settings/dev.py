@@ -24,3 +24,8 @@ EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "mail"
 
 DJOSER["PASSWORD_RESET_CONFIRM_URL"] = FRONTEND_URL + "/" + "account/recover/{uid}/{token}/"
+
+
+# FILES
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "media/"

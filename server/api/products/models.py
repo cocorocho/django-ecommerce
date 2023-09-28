@@ -22,9 +22,8 @@ class Category(BaseModel):
         verbose_name_plural = _("Product Categories")
 
     def save(self, *args, **kwargs) -> None:
-        # Generate slug on create
-        if not self.pk:
-            self.slug = slugify(self.name)
+        # Create or update slug
+        self.slug = slugify(self.name)
 
         return super().save(*args, **kwargs)
 
@@ -45,15 +44,15 @@ class SubCategory(BaseModel):
         verbose_name=_("Category")
     )
     slug = models.SlugField(editable=False)
+    thumbnail = models.ImageField(upload_to="thumbnails/sub-category/", null=True) # revert null
 
     class Meta:
         verbose_name = _("Sub Category")
         verbose_name_plural = _("Sub Categories")
 
     def save(self, *args, **kwargs) -> None:
-        # Generate slug on create
-        if not self.pk:
-            self.slug = slugify(self.name)
+        # Create or update slug
+        self.slug = slugify(self.name)
 
         return super().save(*args, **kwargs)
 
@@ -111,8 +110,7 @@ class Product(BaseModel):
         return f"{self.manufacturer} - {self.name}"
 
     def save(self, *args, **kwargs) -> None:
-        # Generate slug on create
-        if not self.pk:
-            self.slug = slugify(self.manufacturer + self.name)
+        # Create or update slug
+        self.slug = slugify(self.manufacturer + self.name)
 
         return super().save(*args, **kwargs)
