@@ -1,11 +1,15 @@
+from typing import List
+
 from rest_framework import serializers
+from rest_framework.serializers import ReturnDict
 
 from products.models import Category, SubCategory, Product
 from products.serializers import ProductSerializer
 from store.models import StoreProduct
+from store.services.sub_category import SubCategoryService
 
 
-class CategoryProductsSerializer(serializers.ModelSerializer):
+class StoreProductsSerializer(serializers.ModelSerializer):
     """
     Includes fields with key features, no details
     """
@@ -16,7 +20,7 @@ class CategoryProductsSerializer(serializers.ModelSerializer):
         fields = (
             "is_featured",
             "price",
-            "product"
+            "product",
         )
         read_only_fields = fields
 
@@ -32,7 +36,7 @@ class StoreCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ("name", "sub_categories", "slug")
+        fields = ("name", "sub_categories", "slug", "banner",)
 
 
 class StoreCategoryWithProductsSerializer(serializers.ModelSerializer):
@@ -42,3 +46,21 @@ class StoreCategoryWithProductsSerializer(serializers.ModelSerializer):
         model = Category
         fields = ("name", "slug", "products")
         read_only_fields = fields
+
+
+class StoreSubCategoryProductsSerializer(serializers.ModelSerializer):
+    products = serializers.SerializerMethodField()
+
+    class Meta:
+        model = SubCategory
+        fields = (
+            "products",
+            "name",
+            "slug",
+            "thumbnail"
+        )
+        read_only_fields = fields
+
+    def get_products(self, obj) -> ReturnDict:
+        queryset = SubCategoryService.get_store_products(obj.pk)
+        return StoreProductsSerializer(queryset, many=True).data

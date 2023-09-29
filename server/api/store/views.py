@@ -1,38 +1,39 @@
 from django.shortcuts import get_object_or_404
 
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 
 from store.serializers import (
-    StoreCategorySerializer, StoreCategoryWithProductsSerializer, CategoryProductsSerializer
+    StoreCategorySerializer, StoreCategoryWithProductsSerializer, StoreProductsSerializer,
+    StoreSubCategoryProductsSerializer
 )
 from store.models import StoreProduct
-from products.models import Category
+from store.paginators import StorePaginator
+from store.services.products import StoreProductService
+from store.services.category import CategoryService
+from store.services.sub_category import SubCategoryService
+from products.models import Category, SubCategory
 
 
-class CategoryViewSet(ListModelMixin, GenericViewSet):
-    queryset = Category.objects.prefetch_related("sub_categories")
+class CategoryViewSet(ReadOnlyModelViewSet):
+    """
+    List / Retrieve endpoint for `Category`
+    Includes `SubCategory(s)` but no products
+    """
+    queryset = CategoryService.get_categories()
     serializer_class = StoreCategorySerializer
+    lookup_field = "slug"
 
 
-class CategoryProductsViewSet(ListAPIView):
-    class Paginator(PageNumberPagination):
-        page_size = 20
+class SubCategoryAPIView(RetrieveAPIView):
+    """
+    Retrieve endpoint for `SubCategory` using `slug` field.
+    Includes `StoreProduct(s)` of `SubCategory`
+    """
+    queryset = SubCategoryService.get_sub_categories()
+    serializer_class = StoreSubCategoryProductsSerializer
+    pagination_class = StorePaginator
+    lookup_field = "slug"
 
-    serializer_class = CategoryProductsSerializer
-    pagination_class = Paginator
-    lookup_field = "product.sub_category.category.name"
-
-    def get_queryset(self):
-        category_slug = self.kwargs.get("category_slug")
-        category = get_object_or_404(Category, slug=category_slug)
-
-        queryset = (
-            StoreProduct.objects
-                .select_related("product")
-                .filter(product__sub_category__category=category)
-        )
-
-        return queryset

@@ -6,6 +6,10 @@ from products.models import Product
 from core.models import BaseModel
 
 
+def product_image_upload_path(instance, filename) -> str:
+    return f"store/product/{instance.product.product.name}/{filename}"
+
+
 class StoreProduct(BaseModel):
     product = models.OneToOneField(
         to=Product,
@@ -22,8 +26,25 @@ class StoreProduct(BaseModel):
         max_digits=10,
         decimal_places=2,
     )
+    is_listed = models.BooleanField(
+        default=True,
+        verbose_name=_("Listed for sale")
+    )
 
     class Meta:
         verbose_name = _("Store Product")
         verbose_name_plural = _("Store Products")
         ordering = ["-date_created"]
+
+
+class ProductImage(BaseModel):
+    product = models.ForeignKey(
+        to=StoreProduct,
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
+    image = models.ImageField(upload_to=product_image_upload_path)
+
+    class Meta:
+        verbose_name = _("Product Image")
+        verbose_name_plural = _("Product Images")

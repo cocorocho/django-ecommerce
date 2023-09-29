@@ -16,6 +16,7 @@ class Category(BaseModel):
         unique=True
     )
     slug = models.SlugField(editable=False)
+    banner = models.ImageField(upload_to="banners/category/", null=True)
 
     class Meta:
         verbose_name = _("Product Category")
