@@ -27,13 +27,20 @@ class CategoryViewSet(ReadOnlyModelViewSet):
     lookup_field = "slug"
 
 
-class SubCategoryAPIView(RetrieveAPIView):
+class SubCategoryProductsListView(ListAPIView):
     """
     Retrieve endpoint for `SubCategory` using `slug` field.
     Includes `StoreProduct(s)` of `SubCategory`
     """
-    queryset = SubCategoryService.get_sub_categories()
-    serializer_class = StoreSubCategoryProductsSerializer
+    queryset = StoreProductService.get_products()
+    serializer_class = StoreProductsSerializer
     pagination_class = StorePaginator
-    lookup_field = "slug"
 
+    def get_queryset(self):
+        category_slug = self.kwargs.get("category_slug")
+        sub_category_slug = self.kwargs.get("sub_category_slug")
+        queryset = super().get_queryset().filter(
+            product__sub_category__category__slug=category_slug,
+            product__sub_category__slug=sub_category_slug
+        )
+        return queryset

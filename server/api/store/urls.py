@@ -3,7 +3,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from store.views import (
-    CategoryViewSet, SubCategoryAPIView
+    CategoryViewSet, SubCategoryProductsListView
 )
 
 app_name = "store"
@@ -13,5 +13,5 @@ router.register("category", CategoryViewSet)
 
 urlpatterns = [
     *router.urls,
-    path("category/<slug:category_slug>/<slug:slug>/", SubCategoryAPIView.as_view()),
+    path("category/<slug:category_slug>/<slug:sub_category_slug>/", SubCategoryProductsListView.as_view()),
 ]

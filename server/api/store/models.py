@@ -36,6 +36,9 @@ class StoreProduct(BaseModel):
         verbose_name_plural = _("Store Products")
         ordering = ["-date_created"]
 
+    def __str__(self) -> str:
+        return f"{str(self.product)} - {self.price}"
+
 
 class ProductImage(BaseModel):
     product = models.ForeignKey(

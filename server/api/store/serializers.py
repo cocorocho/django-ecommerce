@@ -5,8 +5,15 @@ from rest_framework.serializers import ReturnDict
 
 from products.models import Category, SubCategory, Product
 from products.serializers import ProductSerializer
-from store.models import StoreProduct
+from store.models import StoreProduct, ProductImage
 from store.services.sub_category import SubCategoryService
+
+
+class StoreProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ("image",)
+        read_only_fields = fields
 
 
 class StoreProductsSerializer(serializers.ModelSerializer):
@@ -14,6 +21,7 @@ class StoreProductsSerializer(serializers.ModelSerializer):
     Includes fields with key features, no details
     """
     product = ProductSerializer()
+    images = StoreProductImageSerializer(many=True)
 
     class Meta:
         model = StoreProduct
@@ -21,6 +29,7 @@ class StoreProductsSerializer(serializers.ModelSerializer):
             "is_featured",
             "price",
             "product",
+            "images"
         )
         read_only_fields = fields
 

@@ -15,5 +15,6 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = (
             "manufacturer",
             "name",
+            "slug"
         )
         read_only_fields = fields
