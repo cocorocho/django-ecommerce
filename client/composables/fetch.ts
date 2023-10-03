@@ -1,6 +1,4 @@
-import { useAuthStore } from "~/store/auth";
-
-export const useApiFetch = (url: string, opts: any) => {
+export const useApiFetch = (url: string, opts = {}) => {
   // `useFetch` wrapper
   const config = useRuntimeConfig();
   const apiURL = config.public.apiURL;
@@ -8,13 +6,7 @@ export const useApiFetch = (url: string, opts: any) => {
     "Content-Type": "application/json"
   };
 
-  const { isAuthenticated } = useAuthStore();
-  if (isAuthenticated) {
-    const token = useCookie("token");
-    headers.authorization = `Token ${token}`;
-  }
-
-  return useFetch(url, { baseURL: apiURL, headers: headers, ...opts });
+  return useFetch(url, { baseURL: apiURL, headers: headers });
 }
 
 export const useFetchApi = (url: string, opts: object) : Promise<unknown> => {

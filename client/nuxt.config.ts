@@ -1,13 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   modules: [
     "@nuxtjs/eslint-module",
     "@nuxt/image",
     "@nuxtjs/i18n",
     "@formkit/nuxt",
     "@pinia/nuxt",
-    "nuxt-icon"
+    "@vueuse/nuxt",
+    "nuxt-icon",
+    "vue3-carousel-nuxt"
   ],
   css: ["~/assets/css/main.css"],
   postcss: {

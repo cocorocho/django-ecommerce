@@ -7,15 +7,18 @@
       @submit="submitForm"
     >
       <FormKit
+        id="email"
         type="email"
         name="email"
-        id="email"
         :label="$t('authentication.email')"
         input-class="w-full"
         required
       />
     </FormkitForm>
-    <div v-if="resetMailSent" class="prose">
+    <div
+      v-if="resetMailSent"
+      class="prose"
+    >
       <p>
         {{ $t("authentication.message.emailResetSuccess") }}
       </p>

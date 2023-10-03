@@ -9,39 +9,39 @@
         @submit="submitForm"
       >
         <FormKit
-          name="first_name"
           id="first_name"
+          name="first_name"
           :label="$t('authentication.firstName')"
           required
         />
     
         <FormKit
-          name="last_name"
           id="last_name"
+          name="last_name"
           :label="$t('authentication.lastName')"
           required
         />
     
         <FormKit
+          id="email"
           type="email"
           name="email"
-          id="email"
           :label="$t('authentication.email')"
           required
         />
     
         <FormKit
+          id="password"
           type="password"
           name="password"
-          id="password"
           :label="$t('authentication.password')"
           required
         />
     
         <FormKit
+          id="re_password"
           type="password"
           name="password_confirm"
-          id="re_password"
           :label="$t('authentication.confirmPassword')"
           validation="required|confirm"
           validation-visibility="live"
@@ -50,7 +50,9 @@
       <div class="pt-6 text-sm">
         <div>
           {{ $t('authentication.message.alreadyHaveAccount') }}
-          <NuxtLink :to="{name: 'signin'}">{{ $t('authentication.signIn') }}</NuxtLink>
+          <NuxtLink :to="{name: 'signin'}">
+            {{ $t('authentication.signIn') }}
+          </NuxtLink>
         </div>
       </div>
     </LayoutFormContainer>

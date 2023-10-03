@@ -19,5 +19,11 @@
       "newUser": "New User?",
       "emailResetSuccess": "If the entered email is associated with an account, an email has been sent with instructions of how to reset your password"
     }
+  },
+  "store": {
+    "shopAllName": "Shop all {name}",
+    "category": "Category | Categories",
+    "seeSpecs": "See Specifications",
+    "addToCart": "Add to cart"
   }
 }

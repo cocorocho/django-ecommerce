@@ -8,18 +8,18 @@
         @submit="submitForm"
       >
         <FormKit
+          id="new_password"
           type="password"
           :label="$t('authentication.password')"
-          id="new_password"
           name="new_password"
           input-class="w-full"
           required
         />
         
         <FormKit
+          id="new_password_confirm"
           type="password"
           :label="$t('authentication.confirmPassword')"
-          id="new_password_confirm"
           name="new_password_confirm"
           validation="required|confirm"
           validation-visibility="live"
@@ -43,7 +43,7 @@ const { uid, token } = route.params;
 interface IResetPasswordConfirm {
   new_password: string,
   new_password_confirm: string
-};
+}
 
 const submitForm = async (formData: IResetPasswordConfirm, node: any) => {
   try {

@@ -3,23 +3,23 @@
     <LayoutFormContainer
       :header="$t('authentication.signIn')"
     >
-    <FormkitForm
+      <FormkitForm
         type="form"
         :submit-label="$t('authentication.signIn')"
         @submit="submitForm"
       >
         <FormKit
+          id="email"
           type="email"
           name="email"
-          id="email"
           :label="$t('authentication.email')"
           required
         />
 
         <FormKit
+          id="password"
           type="password"
           name="password"
-          id="password"
           :label="$t('authentication.password')"
           required
         />

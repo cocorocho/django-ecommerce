@@ -6,7 +6,7 @@
           {{ header }}
         </h2>
       </div>
-      <div class="divider"></div>
+      <div class="divider" />
     </div>
     <slot />
   </div>
