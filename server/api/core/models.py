@@ -2,6 +2,14 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 
+class BaseQuerySet(models.QuerySet):
+    pass
+
+
+class BaseManager(models.Manager):
+    pass
+
+
 class BaseModel(models.Model):
     """
     Abstract base model with fields:

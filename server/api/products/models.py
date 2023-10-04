@@ -4,7 +4,14 @@ from django.utils.translation import gettext_lazy as _
 
 from django_jsonform.models.fields import JSONField
 
-from core.models import BaseModel
+from core.models import BaseModel, BaseManager
+from products.querysets import ProductQuerySet
+from products.abc.models import ProductStoreOpts
+
+
+def product_image_upload_path(instance, filename) -> str:
+    dir_name = f"{instance.product.manufacturer}_{instance.product.name}".replace(" ", "_").lower()
+    return f"products/images/{dir_name}/{filename}"
 
 
 class Category(BaseModel):
@@ -61,7 +68,7 @@ class SubCategory(BaseModel):
         return self.name
 
 
-class Product(BaseModel):
+class Product(ProductStoreOpts, BaseModel):
     ATTRIBUTES_SCHEMA = {
         "type": "dict",
         "keys": {
@@ -102,6 +109,12 @@ class Product(BaseModel):
         verbose_name=_("Sub Category")
     )
     slug = models.SlugField(editable=False)
+    is_featured = models.BooleanField(
+        default=False,
+        verbose_name=_("Featured Product")
+    )
+
+    objects = BaseManager.from_queryset(ProductQuerySet)()
 
     class Meta:
         verbose_name = _("Product")
@@ -115,3 +128,19 @@ class Product(BaseModel):
         self.slug = slugify(self.manufacturer + self.name)
 
         return super().save(*args, **kwargs)
+
+
+class ProductImage(BaseModel):
+    product = models.ForeignKey(
+        to=Product,
+        on_delete=models.CASCADE,
+        related_name="images",
+    )
+    image = models.ImageField(
+        upload_to=product_image_upload_path,
+        verbose_name=_("Image file"),
+    )
+
+    class Meta:
+        verbose_name = _("Product image")
+        verbose_name_plural = _("Product images")
