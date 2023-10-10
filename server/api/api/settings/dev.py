@@ -21,7 +21,7 @@ CORS_ALLOWED_ORIGINS = [FRONTEND_URL]
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = BASE_DIR / "mail"
+EMAIL_FILE_PATH = BASE_DIR / "test"
 
 DJOSER["PASSWORD_RESET_CONFIRM_URL"] = FRONTEND_URL + "/" + "account/recover/{uid}/{token}/"
 

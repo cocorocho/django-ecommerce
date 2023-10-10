@@ -2,7 +2,7 @@ from django.utils.text import slugify
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from django_jsonform.models.fields import JSONField
+from tinymce.models import HTMLField
 
 from core.models import BaseModel, BaseManager
 from products.querysets import ProductQuerySet
@@ -69,18 +69,6 @@ class SubCategory(BaseModel):
 
 
 class Product(ProductStoreOpts, BaseModel):
-    ATTRIBUTES_SCHEMA = {
-        "type": "dict",
-        "keys": {
-            "_reserved": {
-                "type": "string",
-                "widget": "hidden",
-                "readonly": True
-            }
-        },
-        "additionalProperties": True
-    }
-
     sku = models.CharField(
         max_length=100,
         verbose_name=_("Product SKU"),
@@ -98,9 +86,9 @@ class Product(ProductStoreOpts, BaseModel):
         blank=True,
         verbose_name=_("Description")
     )
-    attributes = JSONField(
-        verbose_name=_("Product attributes"),
-        schema=ATTRIBUTES_SCHEMA
+    description_rich = HTMLField(
+        blank=True,
+        verbose_name=_("Description (WYSIWYG)")
     )
     sub_category = models.ForeignKey(
         to=SubCategory,
@@ -113,6 +101,15 @@ class Product(ProductStoreOpts, BaseModel):
         default=False,
         verbose_name=_("Featured Product")
     )
+    stock = models.PositiveIntegerField(
+        verbose_name=_("Stock"),
+        default=0,
+        help_text=_("Number of products in stock")
+    )
+
+    @property
+    def in_stock(self) -> bool:
+        return self.stock > 0
 
     objects = BaseManager.from_queryset(ProductQuerySet)()
 

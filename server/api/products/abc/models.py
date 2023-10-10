@@ -18,6 +18,10 @@ class ProductStoreOpts(models.Model):
         decimal_places=2,
         null=True
     )
+    thumbnail = models.ImageField(
+        upload_to="thumbnails/products/",
+        blank=True
+    )
 
     class Meta:
         verbose_name = _("Product Store Option")

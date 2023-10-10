@@ -44,7 +44,6 @@ class SubCategoryView(BaseGenericAPIView):
         )
     
     def get(self, request, *args, **kwargs) -> Response:
-        print(args, kwargs, request.GET)
         queryset = self.get_queryset()
         paginated_queryset = self.paginate_queryset(queryset)
         serializer = self.serializer_class(paginated_queryset, many=True, context={"request": request})

@@ -45,7 +45,8 @@ class StoreProductSerializer(serializers.ModelSerializer):
             "name",
             "price",
             "slug",
-            "images"
+            "images",
+            "thumbnail"
         )
 
 
@@ -59,5 +60,7 @@ class StoreProductDetailSerializer(StoreProductSerializer):
             "price",
             "slug",
             "images",
-            "attributes"
+            "description",
+            "description_rich",
+            "in_stock"
         )
