@@ -1,8 +1,10 @@
 <template>
   <div class="bg-black relative">
-    <div class="container ml-auto">
+    <div>
       <NuxtImg
         :src="bannerUrl"
+        height="250px"
+        class="w-full"
       />
     </div>
     <div class="absolute top-0 w-full h-full">

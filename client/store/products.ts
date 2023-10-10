@@ -8,7 +8,7 @@ export const useProductCategoryStore = defineStore("category", {
   }),
   actions: {
     async fetchCategories() {
-      const categoriesURL: string = "store/category/";
+      const categoriesURL: string = "product/store/category/";
 
       try {
         const { data, pending } = await useApiFetch(categoriesURL);
@@ -21,14 +21,25 @@ export const useProductCategoryStore = defineStore("category", {
       }
     },
     async retrieveCategory(slug: string) {
-      const categoryURL: string = `store/category/${slug}/`;
+      const categoryURL: string = `product/store/category/${slug}/`;
 
       return useApiFetch(categoryURL);
     },
     async retrieveSubCategoryProducts(categorySlug: string, subCategorySlug: string, page: undefined | number) {
-      const subCategoryURL: string = `store/category/${categorySlug}/${subCategorySlug}/`;
+      let subCategoryURL: string = `product/store/category/${categorySlug}/${subCategorySlug}/`;
 
-      return useApiFetch(subCategoryURL);
+      return useApiFetch(subCategoryURL, { query: { page: page }});
     }
-  },
+  }
 });
+
+export const useProductStore = defineStore("productStore", {
+  state: () => ({}),
+  actions: {
+    async retrieveProductDetails(productId: string | string[]) {
+      const productDetailsURL: string = `product/${productId}/`;
+
+      return useApiFetch(productDetailsURL);
+    },
+  },
+})

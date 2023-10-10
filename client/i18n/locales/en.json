@@ -24,6 +24,10 @@
     "shopAllName": "Shop all {name}",
     "category": "Category | Categories",
     "seeSpecs": "See Specifications",
-    "addToCart": "Add to cart"
+    "viewDetails": "View Details",
+    "addToCart": "Add to cart",
+    "inStock": "In Stock",
+    "outOfStock": "Out Of Stock",
+    "buyNow": "Buy Now"
   }
 }

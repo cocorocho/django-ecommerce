@@ -5,8 +5,13 @@ export const useApiFetch = (url: string, opts = {}) => {
   const headers: {[k: string]: any} = {
     "Content-Type": "application/json"
   };
-
-  return useFetch(url, { baseURL: apiURL, headers: headers });
+  let params = reactive({
+    baseURL: apiURL,
+    headers: headers,
+    ...opts
+  });
+  
+  return useFetch(url, params);
 }
 
 export const useFetchApi = (url: string, opts: object) : Promise<unknown> => {
@@ -16,12 +21,11 @@ export const useFetchApi = (url: string, opts: object) : Promise<unknown> => {
   const headers = {
     "Content-Type": "application/json"
   };
-
-  return $fetch(url, {
+  let params = reactive({
     baseURL: apiURL,
     headers: headers,
-    credentials: "include",
     ...opts
-  }
-  );
+  });
+
+  return $fetch(url, params);
 }

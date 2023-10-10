@@ -1,6 +1,7 @@
 <template>
   <div>
     <CatalogBanner
+      v-if="category.banner"
       :banner-url="category.banner"
       :title="category.name"
     />

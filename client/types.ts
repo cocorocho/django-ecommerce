@@ -25,18 +25,22 @@ interface ProductCategory {
   subCategories: Array<ProductSubCategory>
 }
 
-interface Product {
-  manufacturer: string
-  name: string
-  slug: string
-}
-
 interface ProductImage {
   image: string
 }
 
-interface SubCategoryProduct {
-  price: string
-  product: Product
-  images: Array<ProductImage>
+interface Product {
+  id: number,
+  manufacturer: string
+  name: string
+  slug: string
+  images: Array<ProductImage>,
+  thumbnail?: string
+}
+
+interface PaginatedResponse {
+  count: number
+  next: string
+  previous: string
+  results: any
 }
