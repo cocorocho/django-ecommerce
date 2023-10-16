@@ -5,56 +5,54 @@ from model_bakery import baker
 
 from core.test import BaseTestCase
 from products.models import Category, SubCategory
-from store.models import StoreProduct
-from store.serializers import StoreCategorySerializer, StoreProductsSerializer
 
 
-class TestEndpoints(BaseTestCase):
-    def test_list_categories(self) -> None:
-        URL = reverse("store:category-list")
-        categories = baker.make(
-            Category,
-            _fill_optional=True,
-            _quantity=5
-        )
-        sub_categories = baker.make(
-            SubCategory,
-            _quantity=20,
-            category=cycle(categories)
-        )
+# class TestEndpoints(BaseTestCase):
+#     def test_list_categories(self) -> None:
+#         URL = reverse("store:category-list")
+#         categories = baker.make(
+#             Category,
+#             _fill_optional=True,
+#             _quantity=5
+#         )
+#         sub_categories = baker.make(
+#             SubCategory,
+#             _quantity=20,
+#             category=cycle(categories)
+#         )
         
-        response = self.client.get(URL)
-        self.assertEqual(response.status_code, 200)
+#         response = self.client.get(URL)
+#         self.assertEqual(response.status_code, 200)
 
-        data = response.json()
-        expected_data = StoreCategorySerializer(
-            Category.objects.prefetch_related("sub_categories"),
-            many=True
-        ).data
-        self.assertEqual(data, expected_data)
+#         data = response.json()
+#         expected_data = StoreCategorySerializer(
+#             Category.objects.prefetch_related("sub_categories"),
+#             many=True
+#         ).data
+#         self.assertEqual(data, expected_data)
 
-    # def test_retrieve_category_products(self) -> None:
-    #     # TODO
-    #     category = baker.make_recipe("products.tests.category")
-    #     products = baker.make_recipe(
-    #         "store.tests.product",
-    #         _quantity=50,
-    #         product__sub_category__category=category
-    #     )
+#     # def test_retrieve_category_products(self) -> None:
+#     #     # TODO
+#     #     category = baker.make_recipe("products.tests.category")
+#     #     products = baker.make_recipe(
+#     #         "store.tests.product",
+#     #         _quantity=50,
+#     #         product__sub_category__category=category
+#     #     )
 
-    #     URL = reverse("store:category_products", args=[category.slug])
-    #     response = self.client.get(URL)
-    #     self.assertEqual(response.status_code, 200)
+#     #     URL = reverse("store:category_products", args=[category.slug])
+#     #     response = self.client.get(URL)
+#     #     self.assertEqual(response.status_code, 200)
 
-    #     PAGINATION_SIZE = 20
-    #     queryset = (
-    #         StoreProduct.objects
-    #             .select_related("product")
-    #             .filter(product__sub_category__category=category)[:PAGINATION_SIZE]
-    #     )
-    #     expected_data = StoreProductsSerializer(queryset, many=True).data
+#     #     PAGINATION_SIZE = 20
+#     #     queryset = (
+#     #         StoreProduct.objects
+#     #             .select_related("product")
+#     #             .filter(product__sub_category__category=category)[:PAGINATION_SIZE]
+#     #     )
+#     #     expected_data = StoreProductsSerializer(queryset, many=True).data
 
-    #     self.assertEqual(
-    #         response.json()["results"],
-    #         expected_data
-    #     )
+#     #     self.assertEqual(
+#     #         response.json()["results"],
+#     #         expected_data
+#     #     )

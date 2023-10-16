@@ -5,44 +5,35 @@ from model_bakery.recipe import Recipe, foreign_key
 from products.models import Category, SubCategory, Product
 
 
-CATEGORY_NAMES = (
-    "Knives",
-    "Swords",
-    "Axes",
-    "Machetes"
-)
-
-SUB_CATEGORY_NAMES = (
-    "Survival Knives",
-    "Hunting Knives",
-    "Neck Knives",
-    "Nordic Knives",
-    "Daggers"
-)
-
-PRODUCT_NAMES = (
-    "Avant",
-    "Attaboy",
-    "Bombastic",
-    "Fighter",
-    "Bamboo"
-)
+CATEGORIES = {
+    "guitars": [
+        "electric guitars",
+        "classical guitars",
+        "acoustic guitars"
+    ],
+    "drums": [
+        "acoustic drums",
+        "electronic drums",
+        "cymbals"
+    ],
+    "keys": [
+        "keyboards",
+        "pianos",
+        "electric ograns"
+    ]
+}
 
 category = Recipe(
     _model=Category,
-    # name=cycle(CATEGORY_NAMES)
+    name=cycle(i for i in CATEGORIES.keys())
 )
 
 sub_category = Recipe(
     _model=SubCategory,
-    category=foreign_key(category, one_to_one=True),
-    # name=cycle(SUB_CATEGORY_NAMES)
+    category=foreign_key(category)
 )
 
 product = Recipe(
     _model=Product,
-    manufacturer="CRKT",
-    # name=cycle(PRODUCT_NAMES),
-    sub_category=foreign_key(sub_category),
-    attributes=[]
+    sub_category=foreign_key(sub_category)
 )
