@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from django.db import models
-from django.db.models import F, Sum, Prefetch, ExpressionWrapper
+from django.db.models import F, Sum, Prefetch
 
 from core.models import BaseQuerySet
 
@@ -13,7 +12,12 @@ class CartQuerySet(BaseQuerySet):
         """
         return self.filter(checkout_complete=False)
 
-    def with_cart_total(self) -> CartQuerySet:
+    def with_cart_total_price(self) -> CartQuerySet:
+        """
+        Annotate total price of cart item
+        `product.price` * `item.quantity` per item
+        `None` is set if `cart` has no items
+        """
         return self.annotate(
             total_price=Sum(F("items__product__price") * F("items__quantity"))
         )
@@ -25,7 +29,7 @@ class CartQuerySet(BaseQuerySet):
             self.prefetch_related(
                 Prefetch("items", queryset=CartItem.objects.with_total_price()),
                 "items__product",
-            ).with_cart_total()
+            ).with_cart_total_price()
             # TODO add promo code discount
             # TODO shipping
         )
