@@ -141,5 +141,7 @@ export const useCartStore = defineStore('cart', {
     hasItems: (state) => state._cart?.items?.length > 0,
     numItems: (state) => state._cart?.items?.length,
   },
-  persist: true
+  persist: {
+    storage: persistedState.cookies,
+  }
 })

@@ -32,5 +32,11 @@ export default defineNuxtConfig({
   },
   lodash: {
     prefix: "lodash"
+  },
+  piniaPersistedstate: {
+    cookieOptions: {
+      sameSite: true
+    },
+    storage: "localStorage"
   }
 })
