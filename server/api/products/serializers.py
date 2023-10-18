@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from core.serializers import DynamicFieldsModelSerializer
 from products.models import Category, SubCategory, Product, ProductImage
 
 
@@ -46,11 +47,12 @@ class StoreProductSerializer(serializers.ModelSerializer):
             "price",
             "slug",
             "images",
-            "thumbnail"
+            "thumbnail",
+            "in_stock"
         )
 
 
-class StoreProductDetailSerializer(StoreProductSerializer):
+class StoreProductDetailSerializer(DynamicFieldsModelSerializer):
     class Meta(StoreProductSerializer.Meta):
         fields = (
             "id",
@@ -62,5 +64,6 @@ class StoreProductDetailSerializer(StoreProductSerializer):
             "images",
             "description",
             "description_rich",
-            "in_stock"
+            "in_stock",
+            "thumbnail"
         )

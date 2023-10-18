@@ -1,20 +1,26 @@
-export const useApiFetch = (url: string, opts = {}) => {
+import type {
+  NitroFetchRequest,
+  NitroFetchOptions
+} from "nitropack";
+import { UseFetchOptions } from "nuxt/app";
+
+export function useApiFetch<T> (url: string, opts: UseFetchOptions<T> = {}) {
   // `useFetch` wrapper
   const config = useRuntimeConfig();
   const apiURL = config.public.apiURL;
   const headers: {[k: string]: any} = {
     "Content-Type": "application/json"
   };
-  let params = reactive({
+  let params: UseFetchOptions<T> = {
     baseURL: apiURL,
     headers: headers,
     ...opts
-  });
+  };
   
   return useFetch(url, params);
 }
 
-export const useFetchApi = (url: string, opts: object) : Promise<unknown> => {
+export function useFetchApi<T> (url: string, opts: NitroFetchOptions<NitroFetchRequest> = {}) {
   // `$fetch` wrapper
   const config = useRuntimeConfig();
   const apiURL = config.public.apiURL;
@@ -27,5 +33,5 @@ export const useFetchApi = (url: string, opts: object) : Promise<unknown> => {
     ...opts
   });
 
-  return $fetch(url, params);
+  return $fetch<T>(url, params);
 }

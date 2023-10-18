@@ -25,8 +25,8 @@ export const useProductCategoryStore = defineStore("category", {
 
       return useApiFetch(categoryURL);
     },
-    async retrieveSubCategoryProducts(categorySlug: string, subCategorySlug: string, page: undefined | number) {
-      let subCategoryURL: string = `product/store/category/${categorySlug}/${subCategorySlug}/`;
+    async retrieveSubCategoryProducts(categorySlug: string | string[], subCategorySlug: string | string[], page: undefined | number) {
+      const subCategoryURL: string = `product/store/category/${categorySlug}/${subCategorySlug}/`;
 
       return useApiFetch(subCategoryURL, { query: { page: page }});
     }

@@ -20,10 +20,13 @@
         <Icon name="ph:info" size="20px"/>
         {{ $t("store.viewDetails") }}
       </NuxtLink>
-      <button class="btn btn-secondary btn-sm font-semibold">
-        <!-- TODO Add to cart -->
-        <Icon name="ph:shopping-cart" size="20px" />
-      </button>
+      <CatalogCartAddProduct
+        class="btn btn-sm btn-secondary btn-outline"
+        :class="{'btn-disabled': !productData.in_stock}"
+        :product-id="productData.id"
+      >
+        {{ $t("store.addToCart") }}
+      </CatalogCartAddProduct>
     </div>
   </div>
 </template>

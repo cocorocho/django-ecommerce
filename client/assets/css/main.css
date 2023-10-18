@@ -3,6 +3,14 @@
 @tailwind utilities;
 
 
+@layer utilities {
+    @variants responsive {
+        .display-unset {
+            display: unset;
+        }
+    }
+}
+
 body, html, #__nuxt {
     height: 100%;
 }

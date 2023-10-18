@@ -4,6 +4,9 @@
       <slot name="label" />
       <div
         class="prose"
+        :class="{
+          capitalize: capitalize
+        }"
         v-if="label && !$slots.label"
       >
         <h2>{{ label }}</h2>
@@ -14,7 +17,13 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  label?: string
-}>();
+const props = withDefaults(
+    defineProps<{
+      label?: string,
+      capitalize?: boolean
+    }>(),
+  {
+    capitalize: true,
+  }
+);
 </script>

@@ -1,0 +1,3 @@
+# Cart
+CART_SESSION_ID_LEN = 16
+CART_SESSION_COOKIE_KEY = "cart_session"

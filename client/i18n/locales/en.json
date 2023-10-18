@@ -1,4 +1,7 @@
 {
+  "error": {
+    "somethingWentWrong": "Something went wrong"
+  },
   "authentication": {
     "account": "Account",
     "accountLogin": "Account Login",
@@ -21,6 +24,9 @@
     }
   },
   "store": {
+    "error": {
+      "cantAddProductToCart": "Couldn't add product to cart"
+    },
     "shopAllName": "Shop all {name}",
     "category": "Category | Categories",
     "seeSpecs": "See Specifications",
@@ -28,6 +34,15 @@
     "addToCart": "Add to cart",
     "inStock": "In Stock",
     "outOfStock": "Out Of Stock",
-    "buyNow": "Buy Now"
+    "buyNow": "Buy Now",
+    "itemAddedToCart": "Item was added to cart",
+    "yourCart": "Your cart",
+    "product": "Product",
+    "quantity": "Quantity",
+    "total": "Total",
+    "estimatedTotal": "Estimated Total",
+    "checkOut": "Check out",
+    "cartIsEmpty": "Your cart is empty",
+    "continueShopping": "Continue shopping"
   }
 }

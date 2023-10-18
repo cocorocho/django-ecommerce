@@ -4,11 +4,15 @@
       <div class="md:col-span-2">
         <div>
           <Carousel
-            class="py-3"
             ref="mainCarousel"
+            class="py-3 border"
           >
-            <Slide v-for="image in data.images" :key="image.image">
-              <NuxtImg :src="image.image"
+            <Slide
+              v-for="image in data.images"
+              :key="image.image"
+            >
+              <NuxtImg
+                :src="image.image"
                 height="600px"
               />
             </Slide>
@@ -21,12 +25,12 @@
         </div>
         <div
           v-if="data.images"
-          class="hidden md:block"
+          class="hidden md:block mt-2"
         >
           <Carousel
-            ref="gallery"
             id="gallery"
-            :items-to-show="8"
+            ref="gallery"
+            :items-to-show="data.images?.length >= 8 ? 8 : 5"
           >
             <Slide
               v-for="(image, index) in data.images"
@@ -40,7 +44,8 @@
                 type="button"
                 @click="slideTo(index)"
               >
-                <NuxtImg :src="image.image"
+                <NuxtImg
+                  :src="image.image"
                   height="80px"
                   width="80px"
                 />
@@ -52,8 +57,12 @@
       <div class="flex flex-col justify-around">
         <div>
           <div class="font-semibold">
-            <h1 class="text-4xl">{{ data.manufacturer }}</h1>
-            <h2 class="text-2xl">{{ data.name }}</h2>
+            <h1 class="text-4xl">
+              {{ data.manufacturer }}
+            </h1>
+            <h2 class="text-2xl">
+              {{ data.name }}
+            </h2>
           </div>
           <h1 class="text-4xl font-bold pt-6">
             <span class="text-2xl">$</span>{{ data.price }}
@@ -66,13 +75,13 @@
           </p>
         </div>
         <div class="pt-2 space-y-4">
-          <button
+          <CatalogCartAddProduct
             class="btn w-full btn-secondary btn-outline"
             :class="{'btn-disabled': !data.in_stock}"
+            :product-id="data.id"
           >
             {{ $t("store.addToCart") }}
-            <!-- TODO Cart -->
-          </button>
+          </CatalogCartAddProduct>
           <button
             class="btn w-full btn-primary"
             :class="{'btn-disabled': !data.in_stock}"

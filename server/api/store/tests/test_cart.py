@@ -183,7 +183,7 @@ class TestCartEndpoints(BaseTestCase):
             "quantity": new_quantity
         }
 
-        url = reverse("store:cart-update-product", args=(cart.session_id, cart_item.pk))
+        url = reverse("store:cart-product-update-delete", args=(cart.session_id, cart_item.pk))
         response = self.client.patch(url, payload)
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(
@@ -191,3 +191,49 @@ class TestCartEndpoints(BaseTestCase):
             new_quantity
         )
         
+    def test_delete_product_from_cart(self) -> None:
+        cart = baker.make_recipe("store.tests.cart")
+        products = baker.make_recipe("products.tests.product", _quantity=5)
+        cart_items = baker.make_recipe(
+            "store.tests.cart_item",
+            cart=cart,
+            product=cycle(products),
+            _quantity=5
+        )
+        cart_item_to_delete = cart_items[0]
+
+        url = reverse("store:cart-product-update-delete", args=(cart.session_id, cart_item_to_delete.pk))
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertFalse(
+            CartItem.objects.filter(pk=cart_item_to_delete.pk).exists()
+        )
+
+    def test_update_cart_item_quantity(self) -> None:
+        cart = baker.make_recipe("store.tests.cart")
+        product = baker.make_recipe("products.tests.product")
+        cart_item = baker.make_recipe(
+            "store.tests.cart_item",
+            cart=cart, product=product
+        )
+
+        url = reverse("store:cart-product-update-delete", args=(cart.session_id, cart_item.pk))
+        quantities = [
+            {
+                "value": 3,
+                "expected_value": 3,
+                "expected_status": HTTP_200_OK
+            },
+            {
+                "value": -1,
+                "expected_status": HTTP_400_BAD_REQUEST
+            }
+        ]
+        for quantity in quantities:
+            payload = {"quantity": quantity["value"]}
+            response = self.client.patch(url, payload)
+            self.assertEqual(response.status_code, quantity["expected_status"])
+            expected_value = quantity.get("expected_value")
+            if expected_value:
+                cart_item.refresh_from_db()
+                self.assertEqual(cart_item.quantity, expected_value)

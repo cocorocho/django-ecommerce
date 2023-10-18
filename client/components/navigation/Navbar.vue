@@ -43,12 +43,7 @@
         </div>
         <div class="navbar-end">
           <div class="flex justify-end">
-            <NuxtLink
-              to="/cart/"
-              class="link-neutral"
-            >
-              <Icon name="ph:shopping-cart" />
-            </NuxtLink>
+            <CatalogCartLink />
           </div>
         </div>
       </div>

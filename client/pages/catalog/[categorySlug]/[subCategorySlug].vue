@@ -6,22 +6,23 @@
           v-for="_ in 24"
         />
       </template>
-      <div
-        v-if="!pending && data?.results"
-        v-for="product in data?.results"
-        class="p-2"
-      >
-        <CatalogProductCard
-          :product-data="product"
-          class="hover:border-secondary animation-color duration-200"
-        />
-      </div>
+      <template v-if="!pending && data?.results">
+        <div
+          v-for="product in data?.results"
+          class="p-2"
+        >
+          <CatalogProductCard
+            :product-data="product"
+            class="hover:border-secondary animation-color duration-200"
+          />
+        </div>
+      </template>
     </div>
     <div class="text-center">
       <NavigationPaginator
         :url="route.path"
-        :current-page="route.query?.page || 1"
-        :numPages="data.num_pages"
+        :current-page="currentPage"
+        :num-pages="data.num_pages"
         :on-page-change="refresh"
       />
     </div>
@@ -36,7 +37,16 @@ definePageMeta({
 });
 
 const route = useRoute();
-const currentPage = computed(() => route.query?.page || 1);
+const currentPage = computed<number>(
+  () => {
+    const defaultPage: number = 1;
+    const queryPage: number | typeof NaN = lodashToNumber(route.query.page);
+    const page: number =
+      (typeof queryPage === "number" && !isNaN(queryPage))
+        ? queryPage
+        : defaultPage;
+    return page
+  });
 const productCategoryStore = useProductCategoryStore();
 
 const { data, pending, refresh } = await productCategoryStore.retrieveSubCategoryProducts(

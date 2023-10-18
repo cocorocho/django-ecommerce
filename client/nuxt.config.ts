@@ -7,9 +7,11 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@formkit/nuxt",
     "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
     "@vueuse/nuxt",
     "nuxt-icon",
-    "vue3-carousel-nuxt"
+    "vue3-carousel-nuxt",
+    "nuxt-lodash"
   ],
   css: ["~/assets/css/main.css"],
   postcss: {
@@ -27,5 +29,8 @@ export default defineNuxtConfig({
     domains: [
       process.env.API_URL || "http://localhost:8000",
     ]
+  },
+  lodash: {
+    prefix: "lodash"
   }
 })

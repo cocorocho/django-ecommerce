@@ -1,27 +1,32 @@
+interface Toast {
+  message: string
+  status: "success" | "info" | "error" | "warning" | undefined
+}
+
 interface ISignUp {
-  first_name: string,
-  last_name: string,
-  email: string,
-  password: string,
-  password_confirm: string,
+  first_name: string
+  last_name: string
+  email: string
+  password: string
+  password_confirm: string
   re_password?: string
 }
 
 interface ISignIn {
-  email: string,
+  email: string
   password: string
 }
 
 interface ProductSubCategory {
-  name: string,
-  slug: string,
-  thumbnail?: string,
+  name: string
+  slug: string
+  thumbnail?: string
 }
 
 interface ProductCategory {
-  name: string,
-  slug: string,
-  banner?: string,
+  name: string
+  slug: string
+  banner?: string
   subCategories: Array<ProductSubCategory>
 }
 
@@ -30,12 +35,14 @@ interface ProductImage {
 }
 
 interface Product {
-  id: number,
+  id: number
   manufacturer: string
   name: string
   slug: string
-  images: Array<ProductImage>,
+  images: Array<ProductImage>
   thumbnail?: string
+  in_stock: boolean
+  price?: string
 }
 
 interface PaginatedResponse {
@@ -43,4 +50,18 @@ interface PaginatedResponse {
   next: string
   previous: string
   results: any
+}
+
+interface CartItem {
+  id?: number
+  product: Product
+  quantity: number
+  total_price: string // decimal
+}
+
+interface Cart {
+  session_id: string
+  items?: Array<CartItem>
+  total_price: string // decimal
+  // user
 }
