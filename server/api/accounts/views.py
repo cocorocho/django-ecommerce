@@ -5,13 +5,14 @@ from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 
 from accounts.serializers import LoginSerializer
 from accounts.services.auth import login_user, logout_user
+from store.services.cart import merge_user_cart_with_client_cart
 
 
 class LoginView(APIView):
     serializer_class = LoginSerializer
     permission_classes = (AllowAny,)
 
-    def post(self, request) -> Response: # type: ignore
+    def post(self, request) -> Response:  # type: ignore
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
@@ -19,8 +20,11 @@ class LoginView(APIView):
             response = Response(serializer.data, status=HTTP_200_OK)
             login_user(request, user, response)
 
+            # Attempt merge, create new cart, set cookie if required
+            merge_user_cart_with_client_cart(request, response)
+
             return response
-        
+
 
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)

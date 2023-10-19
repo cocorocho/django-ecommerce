@@ -10,7 +10,7 @@ class CartQuerySet(BaseQuerySet):
         """
         Get only active carts which are not checked out
         """
-        return self.filter(checkout_complete=False)
+        return self.filter(checkout_complete=False, merged_to__isnull=True)
 
     def with_cart_total_price(self) -> CartQuerySet:
         """

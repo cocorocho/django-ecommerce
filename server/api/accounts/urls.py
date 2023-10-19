@@ -20,7 +20,7 @@ DJOSER_REQUIRED_ENDPOINTS = (
 app_name = "accounts"
 
 urlpatterns = [
-    path("signin/", LoginView.as_view(), name="login"),
-    path("signout/", LogoutView.as_view(), name="logout"),
-    *[url for url in router.urls if url.name in DJOSER_REQUIRED_ENDPOINTS]
+    path("signin/", LoginView.as_view(), name="user-signin"),
+    path("signout/", LogoutView.as_view(), name="user-signout"),
+    *[url for url in router.urls if url.name in DJOSER_REQUIRED_ENDPOINTS],
 ]

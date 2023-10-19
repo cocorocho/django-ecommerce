@@ -23,14 +23,9 @@ export const useAuthStore = defineStore('auth', {
 
       try {
         this.loading = true;
-        const response = await useFetchApi(URL, { method: "POST", body: payload });
-        const responseToken = response?.auth_token;
+        await useFetchApi(URL, { method: "POST", body: payload });
+        // session-id is set to cookie
 
-        if (responseToken) {
-          const token = useCookie("token");
-          token.value = responseToken;
-        }
-        
         // Redirect to home
         await navigateTo("/");
       } finally {

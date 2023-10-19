@@ -10,25 +10,6 @@ export const useCartStore = defineStore('cart', {
     }
   },
   actions: {
-    async _createNewCartSession() {
-      /**
-       * Create cart session
-       */
-      const URL: string = "store/cart/";
-
-      const response = await useFetchApi(
-        URL,
-        {
-          method: "POST",
-          onRequestError: () => {
-            // TODO toast error
-            throw new Error("failed to load cart");
-          }
-        }
-      );
-
-      this._cart = response;
-    },
     async _fetchCart(sessionId: string) {
       const URL = `store/cart/${sessionId}/`;
       const { data } = await useApiFetch(URL);
@@ -39,15 +20,12 @@ export const useCartStore = defineStore('cart', {
        * Initialize cart session
        * If no cart exists, create new session
        */
-      const cartIsCreated = Boolean(this._cart);
-      const cartSessionId = this._cart?.session_id;
+      const cartSessionId = useCookie("cart_session");
 
-      if (cartIsCreated && cartSessionId) {
-        await this._fetchCart(cartSessionId);
+      if (cartSessionId.value) {
+        await this._fetchCart(cartSessionId.value);
         return;
       }
-
-      await this._createNewCartSession();
     },
     async addProductToCart(productId: number, quantity: number = 1) {
       /**

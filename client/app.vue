@@ -1,5 +1,7 @@
 <template>
   <LayoutToast />
-  <NavigationNavbar />
+  <nav>
+    <NavigationNavbar />
+  </nav>
   <NuxtPage />
 </template>

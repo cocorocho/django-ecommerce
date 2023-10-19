@@ -42,7 +42,8 @@
           </NuxtLink>
         </div>
         <div class="navbar-end">
-          <div class="flex justify-end">
+          <div class="flex justify-end gap-x-4">
+            <NavigationProfile />
             <CatalogCartLink />
           </div>
         </div>

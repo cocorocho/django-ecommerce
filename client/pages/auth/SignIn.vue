@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto">
+  <LayoutContainer>
     <LayoutFormContainer
       :header="$t('authentication.signIn')"
     >
@@ -39,7 +39,7 @@
         </div>
       </div>
     </LayoutFormContainer>
-  </div>
+  </LayoutContainer>
 </template>
 
 <script setup lang="ts">

@@ -1,14 +1,18 @@
 from __future__ import annotations
+from collections.abc import Iterable
+from typing import Iterable
 from collections import OrderedDict
 
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
 from django.utils.crypto import get_random_string
 from django.db import models
+from django.db.models import F, Q
 from django.contrib.auth import get_user_model
 
 from rest_framework.exceptions import ValidationError
 
+from accounts.models import User
 from core.models import BaseModel, BaseManager
 from store.constants import CART_SESSION_ID_LEN
 from store.querysets import CartQuerySet, CartItemQuerySet
@@ -38,6 +42,14 @@ class Cart(BaseModel):
         editable=False,
         verbose_name=_("Cart checked out"),
     )
+    merged_to = models.ForeignKey(
+        to="self",
+        on_delete=models.PROTECT,
+        editable=False,
+        null=True,
+        verbose_name=_("Merged carts"),
+        related_name="merged_with",
+    )
 
     objects = BaseManager.from_queryset(CartQuerySet)()
 
@@ -46,6 +58,12 @@ class Cart(BaseModel):
         verbose_name_plural = _("Carts")
         ordering = ("-date_created",)
         # TODO unique together product cart
+
+    def save(self, *args, **kwargs) -> None:
+        if self.session_id is None:
+            self.session_id = generate_cart_session_id()
+
+        return super().save(*args, **kwargs)
 
     def update_item_quantity(self, cart_item: CartItem, quantity: int) -> None:
         """
@@ -75,7 +93,61 @@ class Cart(BaseModel):
         """
         return self.items.filter(product=product).exists()
 
-    # TODO merge with client cart with server cart if user logs in
+    def merge_carts(self, cart: Cart | Iterable[Cart]) -> "Cart":
+        """
+        Merge given `cart(s)` `item(s)` to this cart
+        """
+        # make it iterable so multiple doesn't have to be handled differently
+        if not isinstance(cart, Iterable):
+            cart = (cart,)
+
+        for _cart in cart:
+            items = _cart.items.all()
+
+            common_products = self.items.filter(
+                product__pk__in=items.values_list("product__pk")
+            ).values_list("product")
+
+            for item in items:
+                if common_products.filter(product=item.product).exists():
+                    this_cart_item = CartItem.objects.get(
+                        product=item.product, cart=self
+                    )
+                    # Get cart item if exists
+                    # Increment quantity if not same
+                    if this_cart_item.quantity != item.quantity:
+                        this_cart_item.quantity = F("quantity") + item.quantity
+                        this_cart_item.save()
+                    continue
+
+                # Create new `CartItem` for this cart if doesn't exist
+                CartItem.objects.create(
+                    product=item.product, cart=self, quantity=item.quantity
+                )
+
+            # Set FK `merged_to`
+            _cart.merged_to = self
+            _cart.save()
+
+        return self
+
+    def appoint_user(self, user: User) -> Cart:
+        """
+        Appoint user to cart, if user already has an active cart
+        client side cart and server side cart will be merged
+        """
+        if (self.user is not None) and (self.user != user):
+            # Possible hijack? Don't appoint user
+            return self
+        elif self.user is None and user.has_cart:
+            # Check if user has an active cart
+            # merge this cart instance to user's cart
+            user.cart.merge_carts(self)
+            return user.cart
+
+        self.user = user
+        self.save()
+        return self
 
 
 class CartItem(BaseModel):

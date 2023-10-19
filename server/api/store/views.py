@@ -20,9 +20,7 @@ from store.serializers import (
 from store.constants import CART_SESSION_COOKIE_KEY
 
 
-class CartViewSet(
-    RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, GenericViewSet
-):
+class CartViewSet(RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     serializer_class = CartSerializer
     lookup_field = "session_id"
 
@@ -36,22 +34,6 @@ class CartViewSet(
 
     def get_queryset(self):
         return Cart.objects.active_carts().with_checkout_data()
-
-    def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-        response = self.set_cart_session_cookie(response)
-        return response
-
-    def set_cart_session_cookie(self, response: Response) -> Response:
-        """
-        Set cart session cookie
-        """
-        key = response.data["session_id"]
-        response.set_cookie(
-            CART_SESSION_COOKIE_KEY,
-            key,
-        )
-        return response
 
     @action(detail=True, methods=["POST", "PATCH"], url_path="item")
     def add_product(self, request, *args, **kwargs):

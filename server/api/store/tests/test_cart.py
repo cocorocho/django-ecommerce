@@ -1,6 +1,7 @@
 import random
 from itertools import cycle
 
+from django.contrib.auth import get_user_model
 from rest_framework.reverse import reverse
 from rest_framework.status import (
     HTTP_405_METHOD_NOT_ALLOWED,
@@ -11,6 +12,7 @@ from rest_framework.status import (
 from model_bakery import baker
 
 from core.test import BaseTestCase
+from store.constants import CART_SESSION_COOKIE_KEY
 from store.models.cart import CartItem, Cart
 from store.serializers import CartSerializer, CartWriteUpdateSerializer
 
@@ -28,44 +30,6 @@ class TestCartModel(BaseTestCase):
 
 
 class TestCartEndpoints(BaseTestCase):
-    def test_list_carts_returns_http_405(self) -> None:
-        url = reverse("store:cart-list")
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_create_cart_without_products(self) -> None:
-        url = reverse("store:cart-list")
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, HTTP_201_CREATED)
-
-    def test_create_cart_with_products(self) -> None:
-        products = baker.make_recipe("products.tests.product", _quantity=4)
-
-        payload = {
-            "items": [
-                {"product": products[0].pk, "quantity": 4},
-                {"product": products[1].pk, "quantity": 5},
-                {"product": products[2].pk},  # No quantity, should be 1 as default
-                {"product": products[3].pk, "quantity": 6},
-            ]
-        }
-
-        url = reverse("store:cart-list")
-        response = self.client.post(url, payload, format="json")
-        self.assertEqual(response.status_code, HTTP_201_CREATED)
-        self.assertEqual(CartItem.objects.count(), len(payload["items"]))
-        self.assertEqual(
-            CartWriteUpdateSerializer(Cart.objects.first()).data, response.json()
-        )
-
-    def test_create_cart_with_invalid_product_returns_http_400(self) -> None:
-        payload = {"items": [{"product": 999}]}
-
-        url = reverse("store:cart-list")
-        response = self.client.post(url, payload)
-        self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
-        self.assertFalse(CartItem.objects.exists())
-
     def test_update_cart(self) -> None:
         cart = baker.make_recipe("store.tests.cart")
         products = baker.make_recipe("products.tests.product", _quantity=1)
@@ -257,3 +221,49 @@ class TestCartQuerySet(BaseTestCase):
 
         for cart in queryset:
             self.assertIsNone(cart.total_price)
+
+
+class TestCartMiddleware(BaseTestCase):
+    def test_create_cart(self) -> None:
+        url = "/"
+        response = self.client.get(url)
+        cart = Cart.objects.first()
+
+        self.assertIsNotNone(cart)
+        self.assertEqual(
+            response.cookies.get(CART_SESSION_COOKIE_KEY).value, cart.session_id
+        )
+
+    def test_not_create_new_cart_when_valid_cart_session_exists(self) -> None:
+        url = "/"
+
+        response = self.client.get(url)
+        cart = Cart.objects.first()
+        self.assertIsNotNone(cart)
+        self.assertEqual(
+            response.cookies.get(CART_SESSION_COOKIE_KEY).value, cart.session_id
+        )
+
+        response = self.client.get(url)
+        self.assertEqual(len(response.cookies), 0)
+        self.assertEqual(
+            self.client.cookies.get(CART_SESSION_COOKIE_KEY).value, cart.session_id
+        )
+
+    def test_create_cart_for_user(self) -> None:
+        """
+        Test create new cart session when client cookies doesn't provide a
+        cart session and user is authenticated but doesn't have a cart session
+        """
+        user = baker.make(get_user_model())
+
+        self.client.force_login(user)
+        url = "/"
+        self.assertFalse(Cart.objects.exists())
+        response = self.client.get(url)
+
+        self.assertEqual(Cart.objects.count(), 1)
+        user.refresh_from_db()
+        self.assertEqual(
+            self.client.cookies.get(CART_SESSION_COOKIE_KEY).value, user.cart.session_id
+        )
