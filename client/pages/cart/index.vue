@@ -18,6 +18,9 @@
           </p>
         </div>
       </div>
+      <div class="text-center md:text-end mt-6">
+        <CatalogCheckoutLink />
+      </div>
     </template>
     <template v-else>
       <div class="pt-24 text-center">

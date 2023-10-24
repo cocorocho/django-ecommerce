@@ -1,13 +1,13 @@
 from __future__ import annotations
 from collections.abc import Iterable
 from typing import Iterable
-from collections import OrderedDict
+from decimal import Decimal
 
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
 from django.utils.crypto import get_random_string
 from django.db import models
-from django.db.models import F, Q
+from django.db.models import F
 from django.contrib.auth import get_user_model
 
 from rest_framework.exceptions import ValidationError
@@ -64,6 +64,14 @@ class Cart(BaseModel):
             self.session_id = generate_cart_session_id()
 
         return super().save(*args, **kwargs)
+
+    def get_total_price(self) -> Decimal:
+        """
+        Calculate total price
+        """
+        return Decimal(
+            sum([(item.quantity * item.product.price) for item in self.items.all()])
+        )
 
     def update_item_quantity(self, cart_item: CartItem, quantity: int) -> None:
         """

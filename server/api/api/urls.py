@@ -19,14 +19,29 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from rest_framework.routers import SimpleRouter
+
+from core.views.geo import CountryViewSet
+
+
+geo_router = SimpleRouter()
+geo_router.register("countries", CountryViewSet, basename="country")
+
+from cities_light.contrib.restframework3 import router as cities_router
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('tinymce/', include('tinymce.urls')),
+    path("admin/", admin.site.urls),
+    path("tinymce/", include("tinymce.urls")),
+    # Django-Cities-Light
+    path("geo/", include(geo_router.urls)),
     # Accounts
     path("account/", include("accounts.urls")),
+    # Products
     path("product/", include("products.urls")),
+    # Store
     path("store/", include("store.urls")),
+    # Payments
+    path("checkout/", include("payments.urls")),
 ]
 
 if settings.DEBUG:

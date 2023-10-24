@@ -43,6 +43,25 @@
     "estimatedTotal": "Estimated Total",
     "checkOut": "Check out",
     "cartIsEmpty": "Your cart is empty",
-    "continueShopping": "Continue shopping"
+    "continueShopping": "Continue shopping",
+    "contact": "Contact",
+    "delivery": "Delivery"
+  },
+  "country": "Country",
+  "city": "City",
+  "firstName": "First Name",
+  "lastName":"Last Name",
+  "postalCode": "Postal Code",
+  "address": "Address",
+  "stateOrCity": "State/city",
+  "expirationDate": "Expiration date",
+  "securityCode": "Security code",
+  "billingAddress": "Billing address",
+  "payment": {
+    "payment": "Payment",
+    "cardNumber": "Card number",
+    "nameOnCard": "Name on card",
+    "useShippingAsBilling": "Use shipping address as billing address",
+    "placeOrder": "Place order"
   }
 }

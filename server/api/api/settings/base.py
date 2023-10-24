@@ -44,11 +44,13 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "djoser",
     "tinymce",
+    "cities_light",
     # Apps
     "core",
     "accounts",
     "products",
     "store",
+    "payments",
 ]
 
 MIDDLEWARE = [

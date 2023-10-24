@@ -1,0 +1,2 @@
+class CheckoutIsNotValid(Exception):
+    pass

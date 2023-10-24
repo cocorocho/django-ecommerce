@@ -1,0 +1,1 @@
+CHECKOUT_EXPIRE_AGE = 600  # seconds

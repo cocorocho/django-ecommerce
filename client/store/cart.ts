@@ -112,6 +112,72 @@ export const useCartStore = defineStore('cart', {
       } finally {
         this.busy = false;
       }
+    },
+    async checkoutCart() {
+      interface CartCheckOut {
+        token: string
+        cart: number
+      }
+      
+      const router = useRouter();
+      const cartSessionId = this._cart?.session_id;
+      const URL: string = `checkout/`;
+
+      const payload = {
+        "cart_session_id": cartSessionId,
+      };
+
+      return useFetchApi<CartCheckOut>(
+        URL,
+        {
+          method: "POST",
+          body: payload,
+          onResponse: async (context) => {
+            if (context.response.ok) {
+              await router.push({
+                name: "cartCheckOut",
+                params: { token: context.response._data.token }
+              })
+            }
+          }
+        }
+      );
+    },
+    async fetchCheckoutSessionData(checkoutToken: string | string[]) {
+      const router = useRouter();
+      const URL: string = `checkout/${checkoutToken}`;
+
+      // TODO onResponse is bugged?
+
+      return useApiFetch(
+        `http://localhost:8000/${URL}/`,
+        {
+          onResponse: async ({ response }) => {
+            if (response.ok) {
+              const responseCheckoutToken = response._data.token;
+              if (responseCheckoutToken !== checkoutToken) {
+                await router.push({
+                  name: "cartCheckOut",
+                  params: { token: response._data.token }
+                });
+              }
+            }
+          },
+        },
+      );
+    },
+    async submitOrder(checkoutToken: string, formData) {
+      const URL: string = `checkout/${checkoutToken}/`;
+
+      // TODO success page
+
+      return useFetchApi(
+        URL,
+        {
+          method: "POST",
+          body: formData
+        }
+      )
     }
   },
   getters: {
