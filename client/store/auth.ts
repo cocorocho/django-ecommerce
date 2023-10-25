@@ -6,31 +6,58 @@ export const useAuthStore = defineStore('auth', {
     loading: false,
   }),
   actions: {
-    async signUpUser(payload: ISignUp) {
+    async signUpUser(payload: SignupForm) {
       const URL = "/account/"
 
-      try {
-        this.loading = true;
-        payload.re_password = payload.password_confirm;
-        const response = await useFetchApi(URL, { method: "POST", body: payload });
-        return response;
-      } finally {
-        this.loading = false;
-      }
+      // Server expects `re_password` for password matching
+      // Not `confirm_password`
+      payload.re_password = payload.confirm_password;
+
+      const _payload: any = Object.assign({}, payload);
+      delete _payload.confirm_password;
+
+      return useFetchApi(
+        URL,
+        {
+          method: "POST",
+          body: _payload,
+          onRequest: () => {
+            this.loading = true;
+          },
+          onResponse: () => {
+            this.loading = false;
+          }
+        }
+      )
     },
-    async signInUser(payload: ISignIn) {
+    async signInUser(payload: SigninForm) {
       const URL = "/account/signin/"
 
-      try {
-        this.loading = true;
-        await useFetchApi(URL, { method: "POST", body: payload });
-        // session-id is set to cookie
+      return useFetchApi(
+        URL,
+        {
+          method: "POST",
+          body: payload,
+          onResponse: async ({ response }) => {
+            if (response.ok) await navigateTo("/");
+            this.loading = false;
+          },
+        }
+      );
+    },
+    async recoverAccount(payload: RecoverAccountForm) {
+      /**
+       * Send password reset request
+       */
+      const URL = "/account/reset_password/";
 
-        // Redirect to home
-        await navigateTo("/");
-      } finally {
-        this.loading = false;
-      }
+      return useFetchApi(
+        URL,
+        {
+          method: "POST",
+          body: payload,
+        }
+      )
     }
   },
   getters: {
