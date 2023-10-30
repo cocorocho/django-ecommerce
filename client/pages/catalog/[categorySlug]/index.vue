@@ -1,23 +1,24 @@
 <template>
-  <div>
+  <div v-if="category">
     <CatalogBanner
       v-if="category.banner"
       :banner-url="category.banner"
       :title="category.name"
     />
-    <div class="container mx-auto pt-4">
+    <LayoutContainer>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-8">
         <div
           v-for="subCategory in category.sub_categories"
           :key="subCategory.slug"
+          class="text-center"
         >
           <NuxtLink
             :to="{ name: 'productSubCategory', params: { subCategorySlug: subCategory.slug } }"
-            class="text-center link-hover"
+            class="no-underline hover:underline"
           >
             <NuxtImg
               :src="subCategory.thumbnail"
-              height="400px"
+              sizes="150px md:250px"
               class="mx-auto"
             />
             <div class="prose">
@@ -28,7 +29,7 @@
           </NuxtLink>
         </div>
       </div>
-    </div>
+    </LayoutContainer>
   </div>
 </template>
 

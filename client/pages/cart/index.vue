@@ -18,7 +18,7 @@
           </p>
         </div>
       </div>
-      <div class="text-center md:text-end mt-6">
+      <div class="flex justify-center md:justify-end mt-6">
         <CatalogCheckoutLink />
       </div>
     </template>

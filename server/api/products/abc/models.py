@@ -4,24 +4,17 @@ from django.utils.translation import gettext_lazy as _
 
 class ProductStoreOpts(models.Model):
     list_for_sale = models.BooleanField(
-        verbose_name=_("List on store for sale"),
-        default=False
+        verbose_name=_("List on store for sale"), default=False
     )
     sell_without_stock = models.BooleanField(
         verbose_name=_("Sell without stock"),
         help_text=_("Keep selling if product is out of stock"),
-        default=False
+        default=False,
     )
     price = models.DecimalField(
-        verbose_name=_("Price"),
-        max_digits=10,
-        decimal_places=2,
-        null=True
+        verbose_name=_("Price"), max_digits=10, decimal_places=2
     )
-    thumbnail = models.ImageField(
-        upload_to="thumbnails/products/",
-        blank=True
-    )
+    thumbnail = models.ImageField(upload_to="thumbnails/products/", blank=True)
 
     class Meta:
         verbose_name = _("Product Store Option")

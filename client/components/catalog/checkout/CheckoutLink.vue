@@ -1,12 +1,13 @@
 <template>
-  <button
+  <PrimeButton
     type="button"
-    class="btn btn-primary btn-outline w-80"
     @click="proceedCartCheckout"
+    class="block w-80"
+    :loading="requestBusy"
+    icon="pi pi-search"
   >
-    <span class="loading loading-spinner" v-if="requestBusy"></span>
     {{ $t("store.checkOut") }}
-  </button>
+  </PrimeButton>
 </template>
 
 <script setup lang="ts">

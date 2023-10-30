@@ -5,15 +5,17 @@ export default defineNuxtConfig({
     "@nuxtjs/eslint-module",
     "@nuxt/image",
     "@nuxtjs/i18n",
-    "@formkit/nuxt",
     "@pinia/nuxt",
     "@pinia-plugin-persistedstate/nuxt",
     "@vueuse/nuxt",
     "nuxt-icon",
-    "vue3-carousel-nuxt",
-    "nuxt-lodash"
+    "nuxt-lodash",
+    "nuxt-primevue"
   ],
-  css: ["~/assets/css/main.css"],
+  css: [
+    "~/assets/css/main.css",
+    "primevue/resources/themes/viva-light/theme.css",
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -28,7 +30,7 @@ export default defineNuxtConfig({
   image: {
     domains: [
       process.env.API_URL || "http://localhost:8000",
-    ]
+    ],
   },
   lodash: {
     prefix: "lodash"
@@ -38,5 +40,10 @@ export default defineNuxtConfig({
       sameSite: true
     },
     storage: "localStorage"
+  },
+  primevue: {
+    components: {
+      prefix: "Prime",
+    }
   }
 })

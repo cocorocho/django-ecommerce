@@ -7,7 +7,8 @@ from rest_framework import serializers
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from drf_writable_nested.mixins import UniqueFieldsMixin
 
-from products.models import Product
+from core.base.serializers import DynamicFieldsModelSerializer
+
 from products.serializers import StoreProductDetailSerializer
 from store.models.cart import Cart, CartItem
 
@@ -63,7 +64,7 @@ class CartSerializer(WritableNestedModelSerializer):
         fields = ("user", "items", "session_id")
 
 
-class CartDetailsReadOnlySerializer(serializers.ModelSerializer):
+class CartDetailsReadOnlySerializer(DynamicFieldsModelSerializer):
     items = CartItemSerializer(many=True, read_only=True)
     # Annotated fields
     total_price = serializers.DecimalField(

@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import { useToastStore } from "./toast";
-
+import { useToastService } from "~/composables/toast";
 
 export const useCartStore = defineStore('cart', {
   state: () => {
@@ -12,7 +11,7 @@ export const useCartStore = defineStore('cart', {
   actions: {
     async _fetchCart(sessionId: string) {
       const URL = `store/cart/${sessionId}/`;
-      const { data } = await useApiFetch(URL);
+      const { data } = await useApiFetch<Cart>(URL);
       this._cart = data.value;
     },
     async initializeCart() {
@@ -33,8 +32,8 @@ export const useCartStore = defineStore('cart', {
        */
       const cartSessionId = this._cart?.session_id;
       const URL = `store/cart/${cartSessionId}/item/`
-      const toastStore = useToastStore();
 
+      const toast = useToastService();
 
       try {
         const data: CartItem = await useFetchApi(
@@ -43,8 +42,19 @@ export const useCartStore = defineStore('cart', {
             method: "POST",
             body: { product: productId, quantity: quantity },
             onResponseError: () => {
-              toastStore.addToast("store.error.cantAddProductToCart", "error");
-            }
+              toast.showToast({
+                summary: "store.error.cantAddProductToCart",
+                severity: "error"
+              });
+            },
+            onResponse({ response }) {
+              if (response.ok) {
+                toast.showToast({
+                  summary: "store.itemAddedToCart",
+                  severity: "success"
+                })
+              }
+            },
           }
         )
 
@@ -57,13 +67,8 @@ export const useCartStore = defineStore('cart', {
           const cartItem = this._cart?.items?.find(i => i.product === data.product);
           if (cartItem) cartItem.quantity = newCartItemQuantity;
         }
-
-        toastStore.addToast(
-          "store.itemAddedToCart",
-          "info"
-        );
       } catch (error) {
-        console.log("err")
+        console.log("err", error)
       }
     },
     async fetchCartDetails() {
@@ -92,23 +97,27 @@ export const useCartStore = defineStore('cart', {
       if (parseInt(newQuantity) < 1) return;
       if (!cartItemId) return;
 
+      const toast = useToastService();
+
       this.busy = true;
       const cartSessionId = this._cart?.session_id;
       const URL: string = `store/cart/${cartSessionId}/item/${cartItemId}/`
       const payload = { "quantity": newQuantity };
       
       try {
-        const response = await useFetchApi(
+        await useFetchApi(
           URL,
           {
             method: "PATCH",
-            body: payload
+            body: payload,
           }
         );
         await this.fetchCartDetails();
       } catch (error) {
-        const toastStore = useToastStore();
-        toastStore.addToast("error.somethingWentWrong", "error")
+        toast.showToast({
+          severity: "error",
+          summary: "error.somethingWentWrong"
+        });
       } finally {
         this.busy = false;
       }
@@ -149,40 +158,50 @@ export const useCartStore = defineStore('cart', {
 
       // TODO onResponse is bugged?
 
-      return useApiFetch(
+      return useApiFetch<CheckoutData>(
         `http://localhost:8000/${URL}/`,
         {
           onResponse: async ({ response }) => {
             if (response.ok) {
               const responseCheckoutToken = response._data.token;
-              if (responseCheckoutToken !== checkoutToken) {
-                await router.push({
+              // If initial checkout token doesn't match new token
+              // refresh page with new token
+              if ((responseCheckoutToken !== checkoutToken) && response.status === 201) {
+                await navigateTo({
                   name: "cartCheckOut",
                   params: { token: response._data.token }
                 });
               }
+            } else if (response.status === 404) {
+              // If checkout session is not found, take user back to cart page
+              await navigateTo("/cart/");
             }
           },
         },
       );
     },
-    async submitOrder(checkoutToken: string, formData) {
-      const URL: string = `checkout/${checkoutToken}/`;
-
-      // TODO success page
+    async submitOrder(checkoutToken: string | string[], formData: FinalizeOrderForm) {
+      const router = useRouter();
+      const URL: string = `checkout/${checkoutToken}/complete/`;
 
       return useFetchApi(
         URL,
         {
           method: "POST",
-          body: formData
-        }
+          body: formData,
+          onResponse: async ({ response }) => {
+            if (response.ok) {
+              // TODO redirect to success page
+              // await router.push({})
+            }
+          }
+        },
       )
     }
   },
   getters: {
     cart: (state) => state._cart,
-    hasItems: (state) => state._cart?.items?.length > 0,
+    hasItems: (state) => state._cart?.items ? state._cart?.items?.length > 0 : false,
     numItems: (state) => state._cart?.items?.length,
   },
   persist: {

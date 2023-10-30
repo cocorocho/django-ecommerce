@@ -1,58 +1,25 @@
 <template>
   <LayoutContainer>
-    <div class="grid md:grid-cols-3 gap-x-2">
+    <div
+      v-if="data"
+      class="grid md:grid-cols-3 gap-x-2"
+    >
       <div class="md:col-span-2">
-        <div>
-          <Carousel
-            ref="mainCarousel"
-            class="py-3 border"
-          >
-            <Slide
-              v-for="image in data.images"
-              :key="image.image"
-            >
-              <NuxtImg
-                :src="image.image"
-                height="600px"
-              />
-            </Slide>
-            <template #addons>
-              <Navigation
-                class="lg:!hidden"
-              />
-            </template>
-          </Carousel>
-        </div>
-        <div
-          v-if="data.images"
-          class="hidden md:block mt-2"
+        <PrimeCarousel
+          :value="data.images"
+          container-class="max-w-[90vw]"
+          :circular="true"
+          :pt="{
+            item: { class: 'text-center' }
+          }"
         >
-          <Carousel
-            id="gallery"
-            ref="gallery"
-            :items-to-show="data.images?.length >= 8 ? 8 : 5"
-          >
-            <Slide
-              v-for="(image, index) in data.images"
-              :key="index"
-              class="px-2"
-              :class="{
-                'border-primary': currentSlide === index,
-              }"
-            >
-              <button
-                type="button"
-                @click="slideTo(index)"
-              >
-                <NuxtImg
-                  :src="image.image"
-                  height="80px"
-                  width="80px"
-                />
-              </button>
-            </Slide>
-          </Carousel>
-        </div>
+          <template #item="slotProps">
+            <NuxtImg
+              :src="slotProps.data.image"
+              class="w-full max-w-[600px]"
+            />
+          </template>
+        </PrimeCarousel>
       </div>
       <div class="flex flex-col justify-around">
         <div>
@@ -76,18 +43,19 @@
         </div>
         <div class="pt-2 space-y-4">
           <CatalogCartAddProduct
-            class="btn w-full btn-secondary btn-outline"
-            :class="{'btn-disabled': !data.in_stock}"
+            :disabled="!data.in_stock"
             :product-id="data.id"
+            class="w-full"
           >
             {{ $t("store.addToCart") }}
           </CatalogCartAddProduct>
-          <button
-            class="btn w-full btn-primary"
-            :class="{'btn-disabled': !data.in_stock}"
+          <PrimeButton
+            severity="success"
+            class="w-full block"
+            :disabled="!data.in_stock"
           >
             {{ $t("store.buyNow") }}
-          </button>
+          </PrimeButton>
         </div>
         <div class="pt-2">
           <p class="text-lg">
@@ -108,15 +76,6 @@ definePageMeta({
 
 const route = useRoute();
 const productStore = useProductStore();
-const currentSlide = ref<number>(0);
-const mainCarousel = ref();
-const gallery = ref();
-
-const slideTo = (index: number) =>  {
-  currentSlide.value = index;
-  mainCarousel.value.slideTo(index);
-  gallery.value.slideTo(index);
-}
 
 const productId: string | string[] = route.params?.id;
 const { data } = await productStore.retrieveProductDetails(productId);

@@ -25,7 +25,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-class StoreProductSerializer(serializers.ModelSerializer):
+class StoreProductSerializer(DynamicFieldsModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
 
     class Meta:
@@ -43,7 +43,7 @@ class StoreProductSerializer(serializers.ModelSerializer):
         )
 
 
-class StoreProductDetailSerializer(DynamicFieldsModelSerializer):
+class StoreProductDetailSerializer(StoreProductSerializer):
     class Meta(StoreProductSerializer.Meta):
         fields = (
             "id",

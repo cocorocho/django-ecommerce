@@ -1,19 +1,10 @@
 <template>
   <NuxtLink
-      to="/cart/"
-      class="link-neutral"
-    >
-    <ClientOnly>
-      <div class="indicator">
-        <span
-          v-if="cartStore.hasItems"
-          class="indicator-item badge badge-secondary badge-sm w-4 h-4"
-        >
-          {{ cartStore.numItems }}
-        </span>
-        <Icon name="ph:shopping-cart" />
-      </div>
-    </ClientOnly>
+    to="/cart/"
+    class="cart-link"
+    v-badge="cartStore.hasItems ? cartStore.numItems : null"
+  >
+    <Icon name="ph:shopping-cart" />
   </NuxtLink>
 </template>
 

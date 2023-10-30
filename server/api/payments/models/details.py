@@ -32,7 +32,7 @@ class AbstractAddress(models.Model):
         verbose_name=_("City"),
     )
     postal_code = models.CharField(
-        max_length=6,
+        max_length=12,
         validators=[RegexValidator("^[0-9]{6}$", _("Invalid postal code"))],
         verbose_name=_("postal code"),
     )

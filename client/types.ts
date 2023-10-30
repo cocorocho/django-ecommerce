@@ -3,18 +3,22 @@ interface Toast {
   status: "success" | "info" | "error" | "warning" | undefined
 }
 
-interface ISignUp {
+interface SignupForm {
   first_name: string
   last_name: string
   email: string
   password: string
-  password_confirm: string
-  re_password?: string
+  confirm_password: string
+  re_password?: string // will be populated before request
 }
 
-interface ISignIn {
+interface SigninForm {
   email: string
   password: string
+}
+
+interface RecoverAccountForm {
+  email: string
 }
 
 interface ProductSubCategory {
@@ -27,7 +31,7 @@ interface ProductCategory {
   name: string
   slug: string
   banner?: string
-  subCategories: Array<ProductSubCategory>
+  sub_categories: Array<ProductSubCategory>
 }
 
 interface ProductImage {
@@ -43,17 +47,20 @@ interface Product {
   thumbnail?: string
   in_stock: boolean
   price?: string
+  description: string
 }
 
 interface PaginatedResponse {
   count: number
-  next: string
-  previous: string
-  results: any
+  num_pages: number
+  num_items: number
+  next: string | null // url
+  previous: string | null
+  results: Array<any>
 }
 
 interface CartItem {
-  id?: number
+  id: number
   product: Product
   quantity: number
   total_price: string // decimal
@@ -64,4 +71,40 @@ interface Cart {
   items?: Array<CartItem>
   total_price: string // decimal
   // user
+}
+
+interface AddressForm {
+  country: string
+  city: string
+  first_name: string
+  last_name: string
+  postal_code: string
+  address: string
+}
+
+interface Address extends AddressForm{
+  id: number
+  name: string
+}
+
+interface PaymentForm {
+  card_number: string
+  expiration_date: string
+  security_code: string
+  name_on_card: string
+  use_shipping_address_as_billing_address: boolean
+  billing_address?: AddressForm
+}
+
+interface FinalizeOrderForm {
+  // Required only if user is not authenticated
+  email?: string
+  shipping_address: number | AddressForm // saved address id if user is authenticated else full address
+  payment: PaymentForm
+}
+
+interface CheckoutData {
+  cart: Cart
+  token: string
+  total_price: string
 }

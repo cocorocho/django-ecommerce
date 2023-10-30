@@ -12,7 +12,7 @@ class RegionSerializer(DynamicFieldsModelSerializer):
 class CountrySerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Country
-        fields = ("name", "slug")
+        fields = ("name", "slug", "phone")
         read_only_fields = fields
 
 

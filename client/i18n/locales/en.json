@@ -1,6 +1,17 @@
 {
+  "or": "or",
   "error": {
     "somethingWentWrong": "Something went wrong"
+  },
+  "form": {
+    "isRequired": "{name} is required",
+    "submit": "Submit",
+    "error": {
+      "passwordNotMatch": "Passwords did not match"
+    }
+  },
+  "message": {
+    "youWillBeRedirected": "You will be redirected in {n} seconds"
   },
   "authentication": {
     "account": "Account",
@@ -45,7 +56,8 @@
     "cartIsEmpty": "Your cart is empty",
     "continueShopping": "Continue shopping",
     "contact": "Contact",
-    "delivery": "Delivery"
+    "delivery": "Delivery",
+    "orderSummary": "Order summary"
   },
   "country": "Country",
   "city": "City",
@@ -57,6 +69,7 @@
   "expirationDate": "Expiration date",
   "securityCode": "Security code",
   "billingAddress": "Billing address",
+  "useDifferentAddress": "Use different address",
   "payment": {
     "payment": "Payment",
     "cardNumber": "Card number",

@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-import formKitTailwind from '@formkit/themes/tailwindcss'
 
 module.exports = {
   content: [
@@ -8,17 +7,19 @@ module.exports = {
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
     "./app.vue",
-    "./formkit.theme.ts"
   ],
   theme: {
-    extend: {},
+    extend: {
+      transitionProperty: {
+        height: "height",
+        'max-height': 'max-height',
+      }
+    },
   },
   plugins: [
     require('@tailwindcss/typography'),
-    require("daisyui"),
-    formKitTailwind,
   ],
-  daisyui: {
-    themes: ["emerald"]
+  corePlugins: {
+    preflight: false
   }
 }

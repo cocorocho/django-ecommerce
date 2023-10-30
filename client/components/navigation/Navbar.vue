@@ -1,62 +1,53 @@
 <template>
-  <div
-    ref="nav"
-    class="shadow-md"
+  <PrimeMenubar
+    :model="menuItems"
+    class="border-0"
+    :pt="{
+      menu: {
+        class: ['container-centered', 'justify-end']
+      }
+    }"
   >
-    <div class="navbar bg-base-200 flex-col">
-      <div class="container mx-auto">
-        <div class="navbar-start">
-          <NavigationDrawer
-            class="md:hidden"
-            activator-class="btn btn-ghost rounded-full"
-          >
-            <ul class="menu">
-              <li>
-                <ClientOnly>
-                  <h2 class="menu-title">
-                    {{ $t("store.category", 2) }}
-                  </h2>
-                </ClientOnly>
-                <ul>
-                  <li
-                    v-for="category in categories"
-                    :key="category.slug"
-                  >
-                    <NuxtLink
-                      :to="{ name: 'productCategory', params: { categorySlug: category.slug } }"
-                      class="link link-neutral link-hover link-underline font-semibold"
-                    >
-                      {{ category.name }}
-                    </NuxtLink>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </NavigationDrawer>
-        </div>
-        <div class="navbar-center">
-          <NuxtLink to="/">
-            <img
-              src="https://placehold.co/200x40"
-            >
-          </NuxtLink>
-        </div>
-        <div class="navbar-end">
-          <div class="flex justify-end gap-x-4">
-            <NavigationProfile />
-            <CatalogCartLink />
-          </div>
-        </div>
+    <template #end>
+      <div class="flex gap-x-4">
+        <NavigationProfile />
+        <CatalogCartLink />
       </div>
-    </div>
-    <NavigationNavProductCategories
-      class="hidden md:block"
-    />
-  </div>
+    </template>
+    <template #item="{ item }">
+      <template
+        v-if="item.route"
+      >
+        <NuxtLink
+          :to="item.route"
+          v-badge="cartStore.hasItems ? cartStore.numItems : null"
+        >
+          <Icon v-if="item.icon" :name="item.icon" />
+        </NuxtLink>
+      </template>
+    </template>
+  </PrimeMenubar>
+  <NavigationNavProductCategories
+    class="hidden md:block"
+  />
 </template>
 
 <script setup lang="ts">
 import { useProductCategoryStore } from '~/store/products';
+import { useCartStore } from "~/store/cart";
+
+const cartStore = useCartStore();
+
+const menuItems = ref([
+  // {
+  //   label: "cart",
+  //   route: "/cart/",
+  //   icon: "ph:shopping-cart"
+  // },
+  // {
+  //   label: "user",
+  // }
+]);
 
 const productCategoryStore = useProductCategoryStore();
 
@@ -65,14 +56,10 @@ await productCategoryStore.fetchCategories();
 
 // Use categories from store
 const categories = productCategoryStore.categories;
-
-const nav = ref();
-const navIsVisible = ref<boolean>(true);
-
-const { stop } = useIntersectionObserver(
-  nav,
-  ([{ isIntersecting }], observerElement) => {
-    navIsVisible.value = isIntersecting;
-  }
-);
 </script>
+
+<style scoped>
+.p-menubar {
+  @apply py-6 px-12;
+}
+</style>

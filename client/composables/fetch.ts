@@ -2,29 +2,30 @@ import type {
   NitroFetchRequest,
   NitroFetchOptions
 } from "nitropack";
+import { defu } from "defu";
 import { UseFetchOptions } from "nuxt/app";
 
-export function useApiFetch<T> (url: string, opts: UseFetchOptions<T> = {}) {
-  // `useFetch` wrapper
+export function useApiFetch<T> (url: string | (() => string), options: UseFetchOptions<T> = {}) {
   const config = useRuntimeConfig();
-  const apiURL = config.public.apiURL;
-  const headers: {[k: string]: any} = {
-    "Content-Type": "application/json"
-  };
-  let params: UseFetchOptions<T> = reactive({
-    baseURL: apiURL,
-    headers: headers,
+
+  const defaults: UseFetchOptions<T> = {
+    baseURL: config.public.apiURL,
     credentials: "include",
-    ...opts
-  });
-  
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const params = defu(options, defaults);
+
   return useFetch(url, params);
 }
 
 export function useFetchApi<T> (url: string, opts: NitroFetchOptions<NitroFetchRequest> = {}) {
   // `$fetch` wrapper
-  const csrfToken = useCookie<string | undefined>("csrftoken");
   const config = useRuntimeConfig();
+  const csrfToken = useCookie<string | undefined>("csrftoken");
+  
   const apiURL = config.public.apiURL;
   const headers: {[key: string]: string} = {
     "Content-Type": "application/json",

@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 
-
 export const useProductCategoryStore = defineStore("category", {
   state: () => ({
     loading: false,
@@ -20,15 +19,15 @@ export const useProductCategoryStore = defineStore("category", {
         console.log(error);
       }
     },
-    async retrieveCategory(slug: string) {
+    async retrieveCategory(slug: string | string[]) {
       const categoryURL: string = `product/store/category/${slug}/`;
 
-      return useApiFetch(categoryURL);
+      return useApiFetch<ProductCategory>(categoryURL);
     },
     async retrieveSubCategoryProducts(categorySlug: string | string[], subCategorySlug: string | string[], page: undefined | number) {
       const subCategoryURL: string = `product/store/category/${categorySlug}/${subCategorySlug}/`;
 
-      return useApiFetch(subCategoryURL, { query: { page: page }});
+      return useApiFetch<PaginatedResponse>(subCategoryURL, { query: { page: page }});
     }
   }
 });
@@ -39,7 +38,7 @@ export const useProductStore = defineStore("productStore", {
     async retrieveProductDetails(productId: string | string[]) {
       const productDetailsURL: string = `product/${productId}/`;
 
-      return useApiFetch(productDetailsURL);
+      return useApiFetch<Product>(productDetailsURL);
     },
   },
 })

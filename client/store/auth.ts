@@ -39,7 +39,18 @@ export const useAuthStore = defineStore('auth', {
           method: "POST",
           body: payload,
           onResponse: async ({ response }) => {
-            if (response.ok) await navigateTo("/");
+            const route = useRoute();
+            const redirect: any = route.query?.redirect;
+
+            if (response.ok) {
+              if (redirect) {
+                await navigateTo(redirect);
+                return;
+              }
+
+              if (response.ok) await navigateTo("/");
+            }
+            
             this.loading = false;
           },
         }
@@ -49,7 +60,7 @@ export const useAuthStore = defineStore('auth', {
       /**
        * Send password reset request
        */
-      const URL = "/account/reset_password/";
+      const URL: string = "/account/reset_password/";
 
       return useFetchApi(
         URL,
@@ -58,6 +69,36 @@ export const useAuthStore = defineStore('auth', {
           body: payload,
         }
       )
+    },
+    async signOut() {
+      /**
+       * Signout user
+       */
+      const router = useRouter();
+      const URL: string = "/account/signout/";
+
+      return useFetchApi(
+        URL,
+        {
+          method: "POST",
+          onResponse: async ({ response }) => {
+            const cookie = useCookie("authenticated");
+            cookie.value = null;
+
+            if (response.ok) {
+              await router.push("/");
+            }
+          }
+        }
+      )
+    },
+    async fetchUserAddresses() {
+      /**
+       * Fetch all user addresses
+       */
+      const URL = "/account/user/address/"
+
+      return useApiFetch<Address[]>(URL);
     }
   },
   getters: {

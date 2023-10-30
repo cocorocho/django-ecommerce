@@ -9,6 +9,7 @@ from store.constants import CART_SESSION_COOKIE_KEY
 from store.models.cart import Cart
 from payments.exceptions import CheckoutIsNotValid
 from payments.models import Checkout
+from store.serializers import CartDetailsReadOnlySerializer
 
 
 def merge_user_cart_with_client_cart(request: HttpRequest, response: HttpResponse):
@@ -41,7 +42,7 @@ class CartCheckout:
 
     @staticmethod
     def checkout_get(cart: Cart, **kwargs) -> Checkout:
-        checkout = Checkout.objects.valid().filter(cart=cart, **kwargs).latest("pk")
+        checkout = cart.checkouts.valid().latest("pk")
 
         if checkout.is_expired:
             raise CheckoutIsNotValid()
@@ -49,7 +50,20 @@ class CartCheckout:
         return checkout
 
     @staticmethod
-    def checkout_get_or_create(cart, **kwargs) -> Checkout:
+    def get_cart_serialized_data(cart: Cart) -> dict:
+        """
+        Get cart's current serialized data.
+        """
+        queryset = Cart.objects.with_cart_total_price().with_checkout_data()
+        cart = queryset.get(pk=cart.pk)
+
+        return CartDetailsReadOnlySerializer(
+            cart,
+            fields=("id", "items", "session_id", "total_price"),
+        ).data
+
+    @staticmethod
+    def checkout_get_or_create(cart: Cart, **kwargs) -> Checkout:
         try:
             checkout = CartCheckout.checkout_get(cart=cart)
         except (Checkout.DoesNotExist, CheckoutIsNotValid):

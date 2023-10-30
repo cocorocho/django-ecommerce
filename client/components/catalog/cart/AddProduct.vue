@@ -1,15 +1,18 @@
 <template>
-  <button
-    type="button"
+  <PrimeButton
+    severity="primary"
     @click="cartStore.addProductToCart(productId, quantity)"
+    class="block"
   >
     <slot />
-  </button>
+  </PrimeButton>
 </template>
 
 <script setup lang="ts">
 import { useCartStore } from '~/store/cart';
+import { useToast } from 'primevue/usetoast';
 
+const toast = useToast();
 const props = defineProps<{
   productId: number,
   quantity?: number,

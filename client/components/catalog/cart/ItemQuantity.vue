@@ -1,18 +1,19 @@
 <template>
   <div class="flex">
     <InputNumberWithControls
-      min="1"
-      :initialValue="cartItem.quantity.toString()"
+      :min="1"
+      :initialValue="cartItem.quantity"
       @valueChanged="onValueChanged"
     />
     <div class="ml-4">
-      <button
-        class="btn btn-ghost"
+      <PrimeButton
         @click="cartStore.removeCartItem(cartItem.id)"
+        size="small"
+        severity="danger"
+        class="p-[4px]"
       >
-        <!-- TODO Remove product from cart -->
-        <Icon name="solar:trash-bin-minimalistic-linear" />
-      </button>
+        <Icon name="solar:trash-bin-minimalistic-linear" height="30px"/>
+      </PrimeButton>
     </div>
   </div>
 </template>

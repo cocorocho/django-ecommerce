@@ -83,64 +83,6 @@
     </div>
 
   </LayoutContainer>
-  <!-- <div class="container mx-auto">
-    <LayoutFormContainer
-      :header="$t('authentication.signUp')"
-    >
-      <FormkitForm
-        type="form"
-        :submit-label="$t('authentication.signUp')"
-        @submit="submitForm"
-      >
-        <FormKit
-          id="first_name"
-          name="first_name"
-          :label="$t('authentication.firstName')"
-          required
-        />
-    
-        <FormKit
-          id="last_name"
-          name="last_name"
-          :label="$t('authentication.lastName')"
-          required
-        />
-    
-        <FormKit
-          id="email"
-          type="email"
-          name="email"
-          :label="$t('authentication.email')"
-          required
-        />
-    
-        <FormKit
-          id="password"
-          type="password"
-          name="password"
-          :label="$t('authentication.password')"
-          required
-        />
-    
-        <FormKit
-          id="re_password"
-          name="re_password"
-          type="password"
-          :label="$t('authentication.confirmPassword')"
-          validation="required|confirm"
-          validation-visibility="live"
-        />
-      </FormkitForm>
-      <div class="pt-6 text-sm">
-        <div>
-          {{ $t('authentication.message.alreadyHaveAccount') }}
-          <NuxtLink :to="{name: 'signin'}">
-            {{ $t('authentication.signIn') }}
-          </NuxtLink>
-        </div>
-      </div>
-    </LayoutFormContainer>
-  </div> -->
 </template>
 
 <script setup lang="ts">

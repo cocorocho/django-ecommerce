@@ -62,15 +62,16 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "~/store/auth"
+import { useAuthStore } from "~/store/auth";
 import { z } from "zod";
 
 definePageMeta({
   path: "/signin/",
-  name: "signin"
+  name: "signin",
 });
 
 const { signInUser, isAuthenticated } = useAuthStore();
+const route = useRoute()
 
 if (isAuthenticated) {
   await navigateTo("/")

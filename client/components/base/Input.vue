@@ -1,5 +1,8 @@
 <template>
-  <div :class="wrapperClass">
+  <div
+    class="input-wrapper"
+    :class="wrapperClass"
+  >
     <template v-if="floatLabel && $attrs.label">
       <span class="p-float-label">
         <component :is="inputTypes[type]"
@@ -35,11 +38,15 @@
 </template>
 
 <script setup lang="ts">
-type InputType = "text" | "password";
+type InputType =
+  "text" | "password" | "number" | "dropdown" | "mask";
 
 const inputTypes = {
   "text": "PrimeInputText",
-  "password": "PrimePassword"
+  "password": "PrimePassword",
+  "number": "PrimeInputNumber",
+  "dropdown": "PrimeDropdown",
+  "mask": "PrimeInputMask",
 };
 
 const props = withDefaults(

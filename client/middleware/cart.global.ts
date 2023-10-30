@@ -1,8 +1,8 @@
 import { useCartStore } from "~/store/cart"
 
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const cartStore = useCartStore();
 
   // Initialize cart fetch/create
-  cartStore.initializeCart();
+  await cartStore.initializeCart();
 })

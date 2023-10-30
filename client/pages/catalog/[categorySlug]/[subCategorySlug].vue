@@ -1,14 +1,10 @@
 <template>
   <LayoutContainer>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-8">
-      <template v-if="pending">
-        <SkeletonCard
-          v-for="_ in 24"
-        />
-      </template>
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
       <template v-if="!pending && data?.results">
         <div
           v-for="product in data?.results"
+          :key="product.id"
           class="p-2"
         >
           <CatalogProductCard
@@ -19,11 +15,11 @@
       </template>
     </div>
     <div class="text-center">
-      <NavigationPaginator
-        :url="route.path"
-        :current-page="currentPage"
-        :num-pages="data.num_pages"
-        :on-page-change="refresh"
+      <PrimePaginator
+        v-if="data"
+        :total-records="data.count"
+        :rows="data.num_items"
+        @page="goToPage"
       />
     </div>
   </LayoutContainer>
@@ -37,21 +33,21 @@ definePageMeta({
 });
 
 const route = useRoute();
-const currentPage = computed<number>(
-  () => {
-    const defaultPage: number = 1;
-    const queryPage: number | typeof NaN = lodashToNumber(route.query.page);
-    const page: number =
-      (typeof queryPage === "number" && !isNaN(queryPage))
-        ? queryPage
-        : defaultPage;
-    return page
-  });
 const productCategoryStore = useProductCategoryStore();
+
+const currentPage = ref<number>(1);
 
 const { data, pending, refresh } = await productCategoryStore.retrieveSubCategoryProducts(
   route.params.categorySlug,
   route.params.subCategorySlug,
   currentPage
 );
+
+const goToPage = ({ page }) => {
+  const _page: number = page + 1;
+  if (currentPage.value !== _page) {
+    currentPage.value = _page;
+    refresh();
+  }
+}
 </script>
