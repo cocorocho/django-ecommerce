@@ -11,6 +11,7 @@ from core.base.serializers import DynamicFieldsModelSerializer
 
 from products.serializers import StoreProductDetailSerializer
 from store.models.cart import Cart, CartItem
+from store.models import FeaturedProducts
 
 
 class CartItemSerializer(serializers.ModelSerializer):
@@ -106,3 +107,12 @@ class CartWriteUpdateSerializer(WritableNestedModelSerializer):
             instance.update_item_quantity(item_to_update, quantity)
 
         return super().update(instance, validated_data)
+
+
+class FeaturedProductsReadOnlySerializer(serializers.ModelSerializer):
+    products = StoreProductDetailSerializer(many=True)
+
+    class Meta:
+        model = FeaturedProducts
+        fields = ("slug", "image", "products", "header")
+        read_only_fields = fields

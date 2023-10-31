@@ -40,5 +40,10 @@ export const useProductStore = defineStore("productStore", {
 
       return useApiFetch<Product>(productDetailsURL);
     },
+    async fetchFeatured() {
+      const URL = "store/product/featured/"
+
+      return useApiFetch<FeaturedProduct[]>(URL)
+    }
   },
 })

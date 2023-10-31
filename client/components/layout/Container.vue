@@ -1,5 +1,10 @@
 <template>
-  <div class="container mx-auto p-4 md:px-0">
+  <div class="p-4 md:px-0"
+    :class="{
+      container: !fluid,
+      'mx-auto': !fluid
+    }"
+  >
     <div>
       <slot name="label" />
       <div
@@ -20,10 +25,12 @@
 const props = withDefaults(
     defineProps<{
       label?: string,
-      capitalize?: boolean
+      capitalize?: boolean,
+      fluid?: boolean
     }>(),
   {
     capitalize: true,
+    fluid: false
   }
 );
 </script>

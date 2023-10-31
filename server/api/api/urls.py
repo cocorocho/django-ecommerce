@@ -31,7 +31,6 @@ from cities_light.contrib.restframework3 import router as cities_router
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("tinymce/", include("tinymce.urls")),
     # Django-Cities-Light
     path("geo/", include(geo_router.urls)),
     # Accounts

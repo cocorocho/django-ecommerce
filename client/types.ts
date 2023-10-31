@@ -108,3 +108,10 @@ interface CheckoutData {
   token: string
   total_price: string
 }
+
+interface FeaturedProduct {
+  id: number
+  thumbnail: string // url
+  slug: string
+  products?: Product[]
+}

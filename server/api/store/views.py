@@ -1,10 +1,12 @@
 from django.shortcuts import get_object_or_404
 
+from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import (
     RetrieveModelMixin,
+    ListModelMixin,
     CreateModelMixin,
     UpdateModelMixin,
 )
@@ -16,8 +18,10 @@ from store.serializers import (
     CartDetailsReadOnlySerializer,
     CartWriteUpdateSerializer,
     CartItemCreateUpdateSerializer,
+    FeaturedProductsReadOnlySerializer,
 )
-from store.constants import CART_SESSION_COOKIE_KEY
+from products.querysets import ProductQuerySet
+from store.services.products import StoreProductService
 
 
 class CartViewSet(RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -69,3 +73,18 @@ class CartViewSet(RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
         cart_item = get_object_or_404(cart.items.all(), id=cart_item_id)
         cart_item.delete()
         return Response()
+
+
+class FeaturedProductsViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
+    serializer_class = FeaturedProductsReadOnlySerializer
+    lookup_field = "slug"
+
+    def get_queryset(self) -> ProductQuerySet:
+        return StoreProductService.get_featured()
+
+    def list(self, request):
+        queryset = self.get_queryset().values("id", "image", "header", "slug")
+        return Response(queryset)
+
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)

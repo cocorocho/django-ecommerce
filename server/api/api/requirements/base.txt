@@ -5,4 +5,4 @@ djangorestframework==3.14.0
 drf-writeable-nested==0.7.0
 djoser==2.2.0
 Pillow==10.0.1
-django-tinymce==3.6.1
+django-ckeditor==6.7.0
