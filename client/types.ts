@@ -1,3 +1,19 @@
+interface StoreMetaData {
+  // Meta
+  name: string
+  logo?: string // Url
+  favicon?: string // Url
+  // Policies
+  return_policy?: string
+  shipping_policy?: string
+  privacy_policy?: string
+  tos?: string
+  // Socials
+  instagram: string
+  facebook: string
+  twitter: string
+}
+
 interface Toast {
   message: string
   status: "success" | "info" | "error" | "warning" | undefined

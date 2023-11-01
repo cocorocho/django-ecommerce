@@ -3,21 +3,20 @@ import { defineStore } from "pinia";
 export const useProductCategoryStore = defineStore("category", {
   state: () => ({
     loading: false,
-    categories: [],
+    categories: [] as ProductCategory[],
   }),
   actions: {
     async fetchCategories() {
       const categoriesURL: string = "product/store/category/";
 
-      try {
-        const { data, pending } = await useApiFetch(categoriesURL);
-        this.loading = pending.value;
-        if (Array.isArray(data.value) && data.value.length) {
-          this.categories = data.value;
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      return useApiFetch<ProductCategory[]>(categoriesURL, {
+        onResponse: async ({ response }) => {
+
+          if (response.ok) {
+            this.categories = response?._data;
+          }
+        },
+      });
     },
     async retrieveCategory(slug: string | string[]) {
       const categoryURL: string = `product/store/category/${slug}/`;

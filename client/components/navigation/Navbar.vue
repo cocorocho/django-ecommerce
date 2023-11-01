@@ -4,62 +4,92 @@
     class="border-0"
     :pt="{
       menu: {
-        class: ['container-centered', 'justify-end']
+        class: 'md:hidden'
+      },
+      menuitem: {
+        class: 'no-underline'
+      },
+      button: {
+        class: 'md:hidden justify-start'
+      },
+      end: {
+        class: 'basis-2/3'
+      },
+      start: {
+        class: 'hidden md:block'
       }
     }"
   >
     <template #end>
-      <div class="flex gap-x-4">
-        <NavigationProfile />
-        <CatalogCartLink />
+      <div class="flex">
+        <div class="flex basis-1/2 justify-center items-center">
+          <NuxtLink
+            to="/"
+            class="transition-transform duration-200 hover:scale-105"
+            v-if="storeMetaData && storeMetaData.logo"
+          >
+            <NuxtImg :src="buildMediaUrl(storeMetaData.logo)"
+              sizes="80px md:120px"
+            />
+          </NuxtLink>
+        </div>
+        <div class="flex basis-1/2 justify-end gap-x-2 md:gap-x-4 items-center">
+          <NavigationProfile />
+          <CatalogCartLink />
+        </div>
       </div>
     </template>
     <template #item="{ item }">
       <template
         v-if="item.route"
       >
-        <NuxtLink
-          :to="item.route"
-          v-badge="cartStore.hasItems ? cartStore.numItems : null"
+        <PrimeButton
+          size="small"
+          class="w-full"
+          text
         >
-          <Icon v-if="item.icon" :name="item.icon" />
-        </NuxtLink>
+          <NuxtLink
+            :to="item.route"
+            class="no-underline"
+          >
+            <Icon v-if="item.icon" :name="item.icon" />
+            {{ item.label }}
+          </NuxtLink>
+        </PrimeButton>
       </template>
     </template>
   </PrimeMenubar>
-  <NavigationNavProductCategories
-    class="hidden md:block"
-  />
+  <NavigationNavProductCategories />
 </template>
 
 <script setup lang="ts">
+import { useStoreMeta } from "~/store/store";
 import { useProductCategoryStore } from '~/store/products';
 import { useCartStore } from "~/store/cart";
 
+const { t } = useI18n();
 const cartStore = useCartStore();
-
-const menuItems = ref([
-  // {
-  //   label: "cart",
-  //   route: "/cart/",
-  //   icon: "ph:shopping-cart"
-  // },
-  // {
-  //   label: "user",
-  // }
-]);
-
+const storeMeta = useStoreMeta();
 const productCategoryStore = useProductCategoryStore();
 
 // Fetch categories
-await productCategoryStore.fetchCategories();
+const { data: productCategories } = await productCategoryStore.fetchCategories();
+const { data: storeMetaData } = await useAsyncData("storeMetaData", async () => storeMeta.store);
 
-// Use categories from store
-const categories = productCategoryStore.categories;
+const menuItems = ref([
+  {
+    label: t("home"),
+    route: "/"
+  },
+  ...productCategories.value?.map((category: ProductCategory) => ({
+    label: category.name,
+    route: { name: "productCategory", params: { categorySlug: category.slug }},
+  })) ?? [],
+]);
 </script>
 
 <style scoped>
 .p-menubar {
-  @apply py-6 px-12;
+  @apply py-6 px-4 md:px-12;
 }
 </style>

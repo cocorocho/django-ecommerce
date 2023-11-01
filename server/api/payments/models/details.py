@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 from cities_light.models import Country, Region
 
-from core.models import BaseModel
+from core.base.models import BaseModel
 
 
 class AbstractAddress(models.Model):

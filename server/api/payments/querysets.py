@@ -4,7 +4,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.db.models import F, Sum, Prefetch
 
-from core.models import BaseQuerySet
+from core.base.models import BaseQuerySet
 from payments.constants import CHECKOUT_EXPIRE_AGE
 from store.models.cart import CartItem
 

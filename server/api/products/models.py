@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from ckeditor.fields import RichTextField
 
-from core.models import BaseModel, BaseManager
+from core.base.models import BaseModel, BaseManager
 from products.querysets import ProductQuerySet
 from products.abc.models import ProductStoreOpts
 

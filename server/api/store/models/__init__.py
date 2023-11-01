@@ -1,2 +1,2 @@
 from . import cart
-from .meta import FeaturedProducts
+from .meta import FeaturedProducts, Store

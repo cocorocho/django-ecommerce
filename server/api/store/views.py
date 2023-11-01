@@ -13,6 +13,7 @@ from rest_framework.mixins import (
 from rest_framework.status import HTTP_201_CREATED
 
 from store.models.cart import Cart
+from store.models import Store
 from store.serializers import (
     CartSerializer,
     CartDetailsReadOnlySerializer,
@@ -22,6 +23,15 @@ from store.serializers import (
 )
 from products.querysets import ProductQuerySet
 from store.services.products import StoreProductService
+
+
+class GetStoreMetaView(APIView):
+    def get_queryset(self):
+        return Store.objects.get_store()
+
+    def get(self, request) -> Response:
+        queryset = self.get_queryset()
+        return Response(queryset)
 
 
 class CartViewSet(RetrieveModelMixin, UpdateModelMixin, GenericViewSet):

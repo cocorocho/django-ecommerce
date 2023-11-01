@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from payments.constants import CHECKOUT_EXPIRE_AGE
-from core.models import BaseModel, BaseManager
+from core.base.models import BaseModel, BaseManager
 from store.models.cart import Cart
 from payments.querysets import CheckoutQuerySet
 

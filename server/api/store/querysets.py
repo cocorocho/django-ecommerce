@@ -1,8 +1,10 @@
 from __future__ import annotations
+import typing
 
-from django.db.models import F, Sum, Prefetch, Value, Case, When, DecimalField
+from django.db.models import F, Sum, Prefetch
 
-from core.models import BaseQuerySet
+from core.base.models import BaseManager, BaseQuerySet
+from store.exceptions import IndeletableStore
 
 
 class CartQuerySet(BaseQuerySet):
@@ -41,3 +43,30 @@ class CartItemQuerySet(BaseQuerySet):
             total_price=F("quantity") * F("product__price"),
             mada_total_price=F("quantity") * F("product__price"),
         )
+
+
+class StoreQuerySet(BaseQuerySet):
+    def delete(self):
+        raise IndeletableStore()
+
+    def get_store(self) -> dict[str, typing.Any] | None:
+        """
+        Store is singleton, first should be the only instance
+        """
+
+        DEFER_FIELDS = ("id", "date_created", "date_modified", "_singleton")
+        return self.values(
+            *[
+                field.name
+                for field in self.model._meta.local_fields
+                if field.name not in DEFER_FIELDS
+            ]
+        ).first()
+
+
+class StoreManager(BaseManager):
+    def get_queryset(self) -> StoreQuerySet:
+        return StoreQuerySet(self.model)
+
+    def delete(self) -> None:
+        raise IndeletableStore()

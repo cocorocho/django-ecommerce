@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 
 from accounts.models import User
-from core.models import BaseModel, BaseManager
+from core.base.models import BaseModel, BaseManager
 from store.constants import CART_SESSION_ID_LEN
 from store.querysets import CartQuerySet, CartItemQuerySet
 from products.models import Product

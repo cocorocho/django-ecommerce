@@ -76,5 +76,6 @@
     "nameOnCard": "Name on card",
     "useShippingAsBilling": "Use shipping address as billing address",
     "placeOrder": "Place order"
-  }
+  },
+  "home": "Home"
 }
