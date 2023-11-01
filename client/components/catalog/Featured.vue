@@ -24,7 +24,9 @@
           <h2 class="featured-item-header">
             {{ data.header }}
           </h2>
-          <NuxtImg :src="buildMediaUrl(data.image)" />
+          <NuxtImg :src="buildMediaUrl(data.image)"
+            sizes="200px md:500px lg:800px"
+          />
         </div>
       </NuxtLink>
     </template>
