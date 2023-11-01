@@ -59,9 +59,10 @@
           </section>
         </BaseForm>
       </div>
-      <div>
+      <div class="relative">
         <section
           id="order-summary"
+          class="sticky top-0"
           v-if="checkoutData"
         >
           <PrimeAccordion

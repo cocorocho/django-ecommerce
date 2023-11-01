@@ -2,9 +2,11 @@ from __future__ import annotations
 import typing
 
 from django.db.models import F, Sum, Prefetch
+from django.db.models.functions import JSONObject
 
 from core.base.models import BaseManager, BaseQuerySet
 from store.exceptions import IndeletableStore
+from store.models.abstract import Socials, StorePolicies
 
 
 class CartQuerySet(BaseQuerySet):
@@ -53,15 +55,27 @@ class StoreQuerySet(BaseQuerySet):
         """
         Store is singleton, first should be the only instance
         """
+        REQUIRED_FIELDS = ("policies", "socials", "name", "logo", "favicon", "address")
 
-        DEFER_FIELDS = ("id", "date_created", "date_modified", "_singleton")
-        return self.values(
-            *[
-                field.name
-                for field in self.model._meta.local_fields
-                if field.name not in DEFER_FIELDS
-            ]
-        ).first()
+        return (
+            self.annotate(
+                # Annotate policies
+                policies=JSONObject(
+                    **{
+                        field.name: F(field.name)
+                        for field in StorePolicies._meta.local_fields
+                    }
+                ),
+                socials=JSONObject(
+                    **{
+                        field.name: F(field.name)
+                        for field in Socials._meta.local_fields
+                    }
+                ),
+            )
+            .values(*REQUIRED_FIELDS)
+            .first()
+        )
 
 
 class StoreManager(BaseManager):

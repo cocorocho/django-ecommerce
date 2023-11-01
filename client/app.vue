@@ -3,6 +3,8 @@
     <NavigationNavbar />
   </nav>
   <NuxtPage />
-  <NavigationFooter />
+  <NavigationFooter
+    class="h-60 min-h-[15rem] mt-auto"
+  />
   <PrimeToast />
 </template>

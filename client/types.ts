@@ -1,17 +1,28 @@
+interface StorePolicies {
+  return_policy: string
+  shipping_policy: string
+  privacy_policy: string
+  tos: string
+}
+
+interface StoreSocials {
+  instagram: string
+  facebook: string
+  twitter: string
+  youtube: string
+  tiktok: string
+  pinterest: string
+}
+
 interface StoreMetaData {
   // Meta
   name: string
   logo?: string // Url
   favicon?: string // Url
   // Policies
-  return_policy?: string
-  shipping_policy?: string
-  privacy_policy?: string
-  tos?: string
+  policies: StorePolicies
   // Socials
-  instagram: string
-  facebook: string
-  twitter: string
+  socials: StoreSocials
 }
 
 interface Toast {

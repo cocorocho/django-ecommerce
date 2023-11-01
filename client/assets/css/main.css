@@ -26,6 +26,8 @@
 body, html, #__nuxt {
     margin: 0;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .container-centered {
