@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 
 from store.models.abstract import StorePolicies, Socials
-from store.models import FeaturedProducts, Store
+from store.models import FeaturedProducts, Store, CartItem
 
 
 @admin.register(Store)
@@ -20,4 +20,9 @@ class StoreAdmin(admin.ModelAdmin):
 
 @admin.register(FeaturedProducts)
 class FeaturedProductsAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
     pass

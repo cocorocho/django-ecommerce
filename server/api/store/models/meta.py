@@ -79,3 +79,10 @@ class Store(
 
     def delete(self) -> None:
         raise IndeletableStore()
+
+    @staticmethod
+    def get_store_name() -> str:
+        if not Store.objects.exists():
+            raise Exception("Need to create a `Store` first")
+
+        return Store.objects.first().name
