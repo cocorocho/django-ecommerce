@@ -38,7 +38,6 @@
 import { z } from "zod";
 
 definePageMeta({
-  path: "/account/recover/:uid/:token/",
   name: "resetPassword"
 })
 

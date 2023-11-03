@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+  postgres:
+    container_name: django-ecommerce-postgres
+    image: postgres:16
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./db:/var/lib/postgresql/data
+
+  django:
+    container_name: django
+    build:
+      context: .
+      dockerfile: ./.docker/django/Dockerfile
+      target: production
+    entrypoint: /entrypoint.sh
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    volumes:
+      - ./server:/code
+      - shared-volume:/var/www
+
+  nuxt-nginx:
+    container_name: nuxt-nginx
+    build:
+      context: .
+      dockerfile: ./.docker/nuxt-nginx/Dockerfile
+      args:
+        - DJANGO_URL=${DJANGO_URL}
+      target: production
+    depends_on:
+      - django
+    # restart: always
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template
+      - shared-volume:/var/www
+    env_file:
+      - .env
+    environment:
+      - NUXT_URL
+      - DJANGO_URL
+
+volumes:
+  shared-volume:

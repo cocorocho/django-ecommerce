@@ -24,13 +24,13 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiURL: process.env.API_URL ?? "http://localhost:8000"
+      apiURL: process.env.DJANGO_URL ?? "http://localhost:8000"
     }
   },
   image: {
     domains: [
-      process.env.API_URL ?? "http://localhost:8000",
-      "https://placehold.co"
+      process.env.DJANGO_URL ?? "http://localhost:8000",
+      process.env.NODE_ENV === "development" ? "https://placehold.co" : "",
     ],
   },
   lodash: {
@@ -46,5 +46,8 @@ export default defineNuxtConfig({
     components: {
       prefix: "Prime",
     }
+  },
+  alias: {
+    quill: process.dev ? "quill/dist/quill.js" : "quill",
   }
 })

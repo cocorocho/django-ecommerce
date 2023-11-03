@@ -1,0 +1,32 @@
+server {
+    listen 80;
+    server_name ${DJANGO_DOMAIN_NAME};
+
+    include /etc/nginx/mime.types;
+
+    location / {
+        proxy_pass http://django:8000;
+        proxy_set_header Host            $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+
+    location /static/ {
+        root /var/www;
+    }
+
+    location /media/ {
+        root /var/www;
+    }
+}
+
+server {
+    listen 80;
+    server_name ${NUXT_DOMAIN_NAME};
+
+    include /etc/nginx/mime.types;
+
+    location / {
+        root /build;
+        index index.html;
+    }
+}

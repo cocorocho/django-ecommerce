@@ -85,7 +85,7 @@ export const useCartStore = defineStore('cart', {
       if (!cartSessionId) return;
 
       const URL: string = `store/cart/${cartSessionId}/item/${cartItemId}/`;
-      const response = await useFetchApi(
+      await useFetchApi(
         URL,
         {
           method: "DELETE",
@@ -153,13 +153,12 @@ export const useCartStore = defineStore('cart', {
       );
     },
     async fetchCheckoutSessionData(checkoutToken: string | string[]) {
-      const router = useRouter();
       const URL: string = `checkout/${checkoutToken}`;
 
       // TODO onResponse is bugged?
 
       return useApiFetch<CheckoutData>(
-        `http://localhost:8000/${URL}/`,
+        URL,
         {
           onResponse: async ({ response }) => {
             if (response.ok) {
@@ -181,7 +180,6 @@ export const useCartStore = defineStore('cart', {
       );
     },
     async submitOrder(checkoutToken: string | string[], formData: FinalizeOrderForm) {
-      const router = useRouter();
       const URL: string = `checkout/${checkoutToken}/complete/`;
 
       return useFetchApi(

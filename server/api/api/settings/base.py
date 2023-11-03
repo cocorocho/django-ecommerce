@@ -26,8 +26,10 @@ SECRET_KEY = "django-insecure-s(23j%n1r^55e7*jkmv5n1(%+z^13qwkb0utqzn7cl1(duu#5!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+FRONTEND_URL = os.getenv("NUXT_URL", "localhost:3000")
+DJANGO_URL = os.getenv("DJANGO_DOMAIN_NAME")
 
+ALLOWED_HOSTS = [DJANGO_URL]
 
 # Application definition
 
@@ -94,11 +96,21 @@ WSGI_APPLICATION = "api.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", 5432),
     }
 }
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -137,6 +149,10 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = os.getenv("STATIC_ROOT", BASE_DIR / "static")
 
+# Meida files
+MEDIA_ROOT = os.getenv("MEDIA_ROOT", BASE_DIR / "media")
+MEDIA_URL = "media/"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -160,9 +176,14 @@ DJOSER = {
     "PERMISSIONS": {"user_list": ["rest_framework.permissions.IsAdminUser"]},
 }
 
+# CORS
+CORS_ALLOWED_ORIGINS = [
+    FRONTEND_URL,
+]
+
 # AUTH
 SESSION_COOKIE_HTTPONLY = True
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
-    os.getenv("FRONTEND_URL", "http://localhost:3000"),
+    FRONTEND_URL,
 ]

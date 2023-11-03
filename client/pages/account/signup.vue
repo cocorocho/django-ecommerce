@@ -90,7 +90,6 @@ import { useAuthStore } from "~/store/auth";
 import { z } from "zod";
 
 definePageMeta({
-  path: "/signup/",
   name: "signup"
 })
 

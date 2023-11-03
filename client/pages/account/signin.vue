@@ -3,14 +3,13 @@
     <div class="w-96 mx-auto mt-8">
       <div class="text-center prose">
         <h2>
-          {{ $t("authentication.message.recoverYourAccount") }}
+          {{ $t("authentication.signIn") }}
         </h2>
       </div>
       <BaseForm
         :errors="errors?._errors"
       >
         <BaseInput
-          class="w-full"
           wrapper-class="mt-8"
           name="email"
           id="email"
@@ -18,87 +17,94 @@
           v-model="formData.email"
           :errors="errors?.email?._errors"
         />
+        <BaseInput
+          wrapper-class="mt-8"
+          class="w-full"
+          type="password"
+          name="password"
+          id="password"
+          :label="$t('authentication.password')"
+          v-model="formData.password"
+          :errors="errors?.password?._errors"
+          :feedback="false"
+        />
         
         <template #actions>
-          <div class="text-center my-8">
-            <div
-              v-if="resetMailSent"
-              class="prose my-4"
+          <div class="mt-8">
+            <NuxtLink
+              class="link"
+              :to="{ name: 'recover' }"
             >
-              <p>
-                {{ $t("authentication.message.emailResetSuccess") }}
-              </p>
-            </div>
+                <small>{{ $t("authentication.message.forgotYourPassword") }}</small>
+            </NuxtLink>
+          </div>
+          <div class="text-center mt-8">
             <PrimeButton
               type="submit"
               @click.prevent="submitForm"
             >
-              {{ $t("authentication.resetPassword") }}
+              {{ $t("authentication.signIn") }}
             </PrimeButton>
 
-            <div class="flex flex-col gap-2 mt-4">
+            <div>
               <NuxtLink
                 class="link"
                 :to="{ name: 'signup' }"
               >
                   <small>{{ $t("authentication.message.newUser") }} {{ $t("authentication.signUp") }}</small>
               </NuxtLink>
-              <NuxtLink
-                class="link"
-                :to="{ name: 'signin' }"
-              >
-                  <small>{{ $t("authentication.signIn") }}</small>
-              </NuxtLink>
             </div>
           </div>
         </template>
       </BaseForm>
     </div>
-
   </LayoutContainer>
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from "~/store/auth";
 import { z } from "zod";
-import { useAuthStore } from '~/store/auth';
 
 definePageMeta({
-  path: "/account/recover/",
-  name: "recover"
-})
+  name: "signin",
+});
 
-const { isAuthenticated, recoverAccount } = useAuthStore();
+const { signInUser, isAuthenticated } = useAuthStore();
+const route = useRoute()
 
 if (isAuthenticated) {
-  await navigateTo("/");
+  await navigateTo("/")
 };
 
-const formData = ref<RecoverAccountForm>({
+const formData = ref<SigninForm>({
   email: "",
-})
+  password: ""
+});
 
 const zodSchema = z.object({
   email: z.string().min(1).email(),
+  password: z.string().min(1)
 });
 
-const { validate , pushErrors, errors } = useZodForm(zodSchema, formData);
-
-const resetMailSent = ref<boolean>(false);
+const { validate, pushErrors, errors } = useZodForm(zodSchema, formData);
 
 const submitForm = async () => {
   const formValid = validate();
 
   if (formValid.success) {
-    resetMailSent.value = false;
-
     try {
-      await recoverAccount(formData.value);
-      resetMailSent.value = true;
+      await signInUser(formData.value);
     } catch (error) {
-      if (error.response._data) {
+      if (error?.response._data) {
         pushErrors(error.response._data);
       }
     }
-  };
+  }
 }
 </script>
+
+<style scoped>
+.container:deep(input) {
+  width: 100%;
+}
+</style>

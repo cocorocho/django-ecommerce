@@ -1,9 +1,8 @@
 <template>
   <LayoutContainer>
-
     <div class="text-center">
       <h1>
-        Thank you for your purchase!
+        {{ $t('message.thankYouForPurchase') }}
       </h1>
       <div>
         <Icon
@@ -23,11 +22,14 @@
 
 const redirectTimer = ref<number>(5);
 
-setInterval(async () => {
-  redirectTimer.value--;
+if (process.client) {
+  const interval = setInterval(() => redirectTimer.value--, 1000);
 
-  if (redirectTimer.value === 0) {
-    await navigateTo("/");
-  }
-}, 1000);
+  watch(redirectTimer, async (value) => {
+    if (value === 0) {
+      clearInterval(interval);
+      await navigateTo("/");
+    }
+  });
+}
 </script>

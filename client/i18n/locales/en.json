@@ -11,7 +11,8 @@
     }
   },
   "message": {
-    "youWillBeRedirected": "You will be redirected in {n} seconds"
+    "youWillBeRedirected": "You will be redirected in {n} seconds",
+    "thankYouForPurchase": "Thank you for your purchase"
   },
   "authentication": {
     "account": "Account",
