@@ -12,10 +12,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # Added another parent because settings are under settings dir
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+PROJECT_DIR = BASE_DIR.parent.parent
+load_dotenv(PROJECT_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -151,6 +156,7 @@ STATIC_ROOT = os.getenv("STATIC_ROOT", BASE_DIR / "static")
 
 # Meida files
 MEDIA_ROOT = os.getenv("MEDIA_ROOT", BASE_DIR / "media")
+MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "media/"
 
 # Default primary key field type
