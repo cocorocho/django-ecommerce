@@ -7,6 +7,7 @@ WORKDIR /code
 COPY ./client .
 
 RUN npm install
+RUN npm run generate
 
 ##### Development #####
 FROM base as development
@@ -18,7 +19,6 @@ CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 
 ##### Production #####
 WORKDIR /code
-RUN npm run generate
 
 FROM nginx:1.25 as production
 
