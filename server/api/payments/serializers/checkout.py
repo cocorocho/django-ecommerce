@@ -108,7 +108,7 @@ class CheckoutReadOnlySerializer(DynamicFieldsModelSerializer):
 
 
 class FinalizeOrderSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=False)
+    email = serializers.EmailField(required=False, allow_blank=True)
 
     shipping_address = AddressCreateUpdateSerializer(allow_null=True, required=False)
     shipping_address_id = AddressKeyRelatedField(allow_null=True, required=False)

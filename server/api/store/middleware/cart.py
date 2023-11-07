@@ -35,5 +35,10 @@ class CartMiddleware:
         if cart_session_id:
             cart, created = Cart.objects.get_or_create(session_id=cart_session_id)
 
+            if not cart.is_valid:
+                # Create new cart if not valid
+                cart = Cart.objects.create()
+                created = True
+
             if created:
                 response.set_cookie(CART_SESSION_COOKIE_KEY, cart.session_id)

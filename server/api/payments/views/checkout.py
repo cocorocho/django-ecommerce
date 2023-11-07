@@ -59,4 +59,11 @@ class CheckoutFinalizeAPIView(GenericAPIView):
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        # Save checkout/cart as checked-out
+        checkout.checkout_complete = True
+        checkout.cart.checkout_complete = True
+        checkout.cart.save()
+        checkout.save()
+
         return Response(status=HTTP_201_CREATED)

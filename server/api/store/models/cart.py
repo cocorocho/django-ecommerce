@@ -65,6 +65,10 @@ class Cart(BaseModel):
 
         return super().save(*args, **kwargs)
 
+    @property
+    def is_valid(self) -> bool:
+        return not self.checkout_complete
+
     def get_total_price(self) -> Decimal:
         """
         Calculate total price
