@@ -4,17 +4,20 @@
       <div class="grid grid-cols-3 h-full">
         <div class="col-span-2 grid lg:grid-cols-2">
           <div v-if="Object.keys(policies).length">
-            <NuxtLink
+            <div
               v-for="policy in Object.keys(policies)"
               :key="policy"
-              class="capitalize"
-              :to="{
-                name: 'storePolicies',
-                params: { policyName: policy }
-              }"
             >
-              {{ normalize(policy) }}
-            </NuxtLink>
+              <NuxtLink
+                class="capitalize"
+                :to="{
+                  name: 'storePolicies',
+                  params: { policyName: policy }
+                }"
+              >
+                {{ normalize(policy) }}
+              </NuxtLink>
+            </div>
           </div>
           <div>
             <!-- socials -->

@@ -30,10 +30,12 @@ export const useCartStore = defineStore('cart', {
       /**
        * Add product to cart
        */
-      const cartSessionId = this._cart?.session_id;
-      const URL = `store/cart/${cartSessionId}/item/`
-
+      const cartSessionId = useCookie("cart_session");
       const toast = useToastService();
+
+      if (!cartSessionId.value) await this.initializeCart();
+      
+      const URL = `store/cart/${cartSessionId.value}/item/`
 
       try {
         const data: CartItem = await useFetchApi(
@@ -75,8 +77,11 @@ export const useCartStore = defineStore('cart', {
       /**
        * Fetch cart data with details such as price, thumbnail, etc
        */
-      const sessionId = this.cart?.session_id;
-      const URL = `store/cart/${sessionId}/`;
+      const sessionId = useCookie("cart_session");
+
+      if (!sessionId.value) await this.initializeCart();
+
+      const URL = `store/cart/${sessionId.value}/`;
       return useApiFetch<Cart>(URL);
     },
     async removeCartItem(cartItemId: number) {
@@ -189,8 +194,12 @@ export const useCartStore = defineStore('cart', {
           body: formData,
           onResponse: async ({ response }) => {
             if (response.ok) {
-              // TODO redirect to success page
-              // await router.push({})
+              await navigateTo("/checkout/success/");
+            } else if (response.status === 404) {
+              /**
+               * Token was expired, take user back to cart
+               */
+              await navigateTo("/cart/");
             }
           }
         },

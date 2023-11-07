@@ -2,7 +2,7 @@
   <NuxtLink
     to="/cart/"
     class="cart-link"
-    v-badge="cartStore.hasItems ? cartStore.numItems : null"
+    v-badge="cartStore.hasItems ? cartStore.numItems : ''"
   >
     <Icon name="ph:shopping-cart" />
   </NuxtLink>

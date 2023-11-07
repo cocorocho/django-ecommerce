@@ -20,13 +20,15 @@
   >
     <template #item="{ data }">
       <NuxtLink :to="{ name: 'catalogFeatured', params: { slug: data.slug }}" class="w-full">
-        <div class="featured-card">
-          <h2 class="featured-item-header">
-            {{ data.header }}
-          </h2>
-          <NuxtImg :src="buildMediaUrl(data.image)"
-            sizes="200px md:500px lg:800px"
-          />
+        <div class="px-w lg:px-4">
+          <div class="featured-card">
+            <h2 class="featured-item-header">
+              {{ data.header }}
+            </h2>
+            <NuxtImg :src="buildMediaUrl(data.image)"
+              sizes="200px md:500px lg:800px"
+            />
+          </div>
         </div>
       </NuxtLink>
     </template>
@@ -66,8 +68,6 @@ const carouselSettings = ref([
 
 .featured-card {
   @apply
-    px-2
-    lg:px-4
     h-[200px]
     md:h-[300px];
 }
@@ -82,7 +82,7 @@ const carouselSettings = ref([
 
 .featured-item-header {
   z-index: 1;
-  @apply bottom-6 right-6 lg:bottom-6 lg:right-16 absolute text-white;
+  @apply bottom-6 absolute text-white text-center w-full;
 }
 
 .featured-item-header * {

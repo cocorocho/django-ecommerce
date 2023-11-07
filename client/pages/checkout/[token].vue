@@ -36,17 +36,17 @@
           <section id="delivery">
             <p class="section-header">{{ $t("store.delivery") }}</p>
 
-            <template v-if="!isAuthenticated">
-              <CatalogCheckoutFormAddress
-                class="mt-6"
-                @input="formData.shipping_address = $event"
-                :errors="errors?.shipping_address"
+            <template v-if="isAuthenticated && userAddresses?.length">
+              <UserAddressList
+                @addressSelected="formData.shipping_address = $event"
+                :errors="errors?.shipping_address?._errors"
               />
             </template>
             <template v-else>
-              <UserAddressList
-                @addressSelected="formData.shipping_address = $event"
-                :errors="errors?.shipping_address"
+              <CatalogCheckoutFormAddress
+                class="mt-6"
+                @input="formData.shipping_address = $event"
+                :errors="errors?.shipping_address?._errors"
               />
             </template>
           </section>
@@ -104,8 +104,9 @@
 </template>
 
 <script setup lang="ts">
-import { useCartStore } from '~/store/cart';
 import { z } from "zod";
+import { useCartStore } from '~/store/cart';
+import { useAuthStore } from '~/store/auth';
 
 definePageMeta({
   name: "cartCheckOut",
@@ -113,6 +114,7 @@ definePageMeta({
 
 const { t } = useI18n();
 
+const authStore = useAuthStore();
 const route = useRoute();
 const checkoutToken: string | string[] = route.params?.token;
 
@@ -122,6 +124,7 @@ const { isAuthenticated } = useAuth();
 
 // Validate/Get checkout session data
 const { data: checkoutData } = await cartStore.fetchCheckoutSessionData(checkoutToken);
+const { data: userAddresses } = await authStore.fetchUserAddresses();
 
 const formData = ref<FinalizeOrderForm>({
   email: "",

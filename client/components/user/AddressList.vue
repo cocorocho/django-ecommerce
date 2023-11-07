@@ -6,7 +6,9 @@
       :address="address"
       v-model="selectedAddress"
     />
-    <PrimeDivider type="solid">
+    <PrimeDivider type="solid"
+      v-if="data?.length"
+    >
       <p class="capitalize font-bold">
         {{ $t('or') }}
       </p>
@@ -21,6 +23,7 @@
         :errors="$attrs?.errors"
       />
     </UserAddressCard>
+    {{ $attrs?.errors }}
   </div>
 </template>
 

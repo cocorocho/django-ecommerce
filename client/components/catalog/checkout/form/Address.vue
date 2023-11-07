@@ -40,16 +40,10 @@
     </div>
 
     <div class="grid mt-8 gap-y-8">
-      <!-- <BaseInput
-        type="mask"
-        :label="$t('postalCode')"
-        v-model="formData.postal_code"
-      /> -->
-      <!-- POSTAL CODE MASK -->
       <BaseInput
         :label="$t('postalCode')"
         v-model="formData.postal_code"
-        :errors="errors?.city?._errors"
+        :errors="errors?.postal_code"
       />
 
       <BaseInput
