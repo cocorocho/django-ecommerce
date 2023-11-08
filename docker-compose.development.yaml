@@ -2,7 +2,7 @@ version: "3"
 
 services:
   postgres:
-    container_name: django-ecommerce-postgres
+    container_name: ecommerce-postgres
     image: postgres:16
     restart: always
     env_file:
@@ -15,7 +15,7 @@ services:
       - ./db:/var/lib/postgresql/data
 
   django:
-    container_name: django
+    container_name: ecommerce-django
     build:
       context: .
       dockerfile: ./.docker/django/Dockerfile
@@ -36,7 +36,7 @@ services:
     container_name: nuxt
     build:
       context: .
-      dockerfile: ./.docker/nuxt-nginx/Dockerfile
+      dockerfile: ./.docker/nuxt/Dockerfile
       args:
         - DJANGO_URL=${DJANGO_URL}
       target: development

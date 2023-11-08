@@ -2,7 +2,7 @@ version: "3"
 
 services:
   postgres:
-    container_name: django-ecommerce-postgres
+    container_name: ecommerce-postgres
     image: postgres:16
     restart: always
     env_file:
@@ -15,7 +15,7 @@ services:
       - ./db:/var/lib/postgresql/data
 
   django:
-    container_name: django
+    container_name: ecommerce-django
     build:
       context: .
       dockerfile: ./.docker/django/Dockerfile
@@ -30,17 +30,33 @@ services:
       - ./server:/code
       - shared-volume:/var/www
 
-  nuxt-nginx:
-    container_name: nuxt-nginx
+  nuxt:
+    container_name: ecommerce-nuxt
     build:
       context: .
-      dockerfile: ./.docker/nuxt-nginx/Dockerfile
+      dockerfile: ./.docker/nuxt/Dockerfile
+      args:
+        - DJANGO_URL=${DJANGO_URL}
+      target: production
+    env_file:
+      - .env
+    depends_on:
+      - django
+    environment:
+      - NUXT_URL
+      - DJANGO_URL
+
+  nginx:
+    container_name: ecommerce-nginx
+    build:
+      context: .
+      dockerfile: ./.docker/nginx/Dockerfile
       args:
         - DJANGO_URL=${DJANGO_URL}
       target: production
     depends_on:
       - django
-    # restart: always
+      - nuxt
     volumes:
       - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template
       - shared-volume:/var/www
