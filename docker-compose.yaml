@@ -51,9 +51,6 @@ services:
     build:
       context: .
       dockerfile: ./.docker/nginx/Dockerfile
-      args:
-        - DJANGO_URL=${DJANGO_URL}
-      target: production
     depends_on:
       - django
       - nuxt
