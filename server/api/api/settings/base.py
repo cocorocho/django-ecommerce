@@ -32,9 +32,10 @@ SECRET_KEY = "django-insecure-s(23j%n1r^55e7*jkmv5n1(%+z^13qwkb0utqzn7cl1(duu#5!
 DEBUG = True
 
 FRONTEND_URL = os.getenv("NUXT_URL", "localhost:3000")
-DJANGO_URL = os.getenv("DJANGO_DOMAIN_NAME")
+DJANGO_URL = os.getenv("DJANGO_URL")
+DJANGO_FULL_URL = os.getenv("DJANGO_DOMAIN_NAME")
 
-ALLOWED_HOSTS = [DJANGO_URL]
+ALLOWED_HOSTS = [DJANGO_FULL_URL]
 
 # Application definition
 
@@ -185,4 +186,5 @@ SESSION_COOKIE_HTTPONLY = True
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     FRONTEND_URL,
+    DJANGO_URL,
 ]
