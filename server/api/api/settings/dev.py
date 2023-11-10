@@ -7,6 +7,10 @@ INSTALLED_APPS += ["debug_toolbar"]
 
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
+# Static / Media
+STATIC_ROOT = BASE_DIR / "static"
+MEDIA_ROOT = BASE_DIR / "media"
+
 # Debug Toolbar
 INTERNAL_IPS = (
     "localhost",
