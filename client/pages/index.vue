@@ -19,6 +19,20 @@
   </LayoutContainer>
 </template>
 
+<script setup lang="ts">
+import { useStoreMeta } from '~/store/store';
+
+const storeMeta = useStoreMeta();
+const { data: storeMetaData } = await useAsyncData("storeMetaData", async () => storeMeta.store);
+
+useSeoMeta({
+  title: storeMetaData.value?.name,
+  ogTitle: storeMetaData.value?.name,
+  description: storeMetaData.value?.seo.description,
+  ogDescription: storeMetaData.value?.seo.description
+});
+</script>
+
 <style scoped>
 #hero {
   height: 50dvh;

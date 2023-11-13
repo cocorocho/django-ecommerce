@@ -28,10 +28,6 @@
 <script setup lang="ts">
 import { useProductCategoryStore } from '~/store/products';
 
-definePageMeta({
-  name: "productSubCategory"
-});
-
 const route = useRoute();
 const productCategoryStore = useProductCategoryStore();
 
@@ -40,7 +36,7 @@ const currentPage = ref<number>(1);
 const { data, pending, refresh } = await productCategoryStore.retrieveSubCategoryProducts(
   route.params.categorySlug,
   route.params.subCategorySlug,
-  currentPage
+  currentPage.value
 );
 
 const goToPage = ({ page }) => {

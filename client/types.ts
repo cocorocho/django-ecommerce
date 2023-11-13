@@ -14,6 +14,10 @@ interface StoreSocials {
   pinterest: string
 }
 
+interface SEO {
+  description: string
+}
+
 interface StoreMetaData {
   // Meta
   name: string
@@ -23,6 +27,8 @@ interface StoreMetaData {
   policies: StorePolicies
   // Socials
   socials: StoreSocials
+  // SEO
+  seo: SEO
 }
 
 interface Toast {
@@ -75,6 +81,8 @@ interface Product {
   in_stock: boolean
   price?: string
   description: string
+  description_rich: string
+  description_short: string
 }
 
 interface PaginatedResponse {

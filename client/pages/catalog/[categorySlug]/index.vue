@@ -13,7 +13,7 @@
           class="text-center"
         >
           <NuxtLink
-            :to="{ name: 'productSubCategory', params: { subCategorySlug: subCategory.slug } }"
+            :to="`${categoryName}/${subCategory.slug}/`"
             class="no-underline hover:underline"
           >
             <NuxtImg
@@ -42,5 +42,11 @@ definePageMeta({
 
 const route = useRoute();
 const productCategoryStore = useProductCategoryStore();
+const categoryName = route.params.categorySlug;
 const { data: category } = await productCategoryStore.retrieveCategory(route.params.categorySlug);
+
+useSeoMeta({
+  description: category.value?.name,
+  ogDescription: category.value?.name,
+});
 </script>

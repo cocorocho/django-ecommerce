@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django.contrib import admin
 
-from store.models.abstract import StorePolicies, Socials
+from store.models.abstract import StorePolicies, Socials, SEO
 from store.models import FeaturedProducts, Store, CartItem
 
 
@@ -15,6 +15,7 @@ class StoreAdmin(admin.ModelAdmin):
             {"fields": [field.name for field in StorePolicies._meta.fields]},
         ),
         (_("Socials"), {"fields": [field.name for field in Socials._meta.fields]}),
+        ("SEO", {"fields": [field.name for field in SEO._meta.fields]}),
     )
 
 

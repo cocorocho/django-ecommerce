@@ -44,3 +44,19 @@ class Socials(models.Model):
 
     class Meta:
         abstract = True
+
+
+class SEO(models.Model):
+    """
+    SEO properties for store
+    """
+
+    description = models.CharField(
+        max_length=150,
+        verbose_name=_("Store description"),
+        help_text=_("Page description for SEO"),
+        blank=True,
+    )
+
+    class Meta:
+        abstract = True

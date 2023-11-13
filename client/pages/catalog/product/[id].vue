@@ -79,6 +79,11 @@ const productStore = useProductStore();
 
 const productId: string | string[] = route.params?.id;
 const { data } = await productStore.retrieveProductDetails(productId);
+
+useSeoMeta({
+  description: data.value?.description_short,
+  ogDescription: data.value?.description_short
+});
 </script>
 
 

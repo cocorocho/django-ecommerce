@@ -6,7 +6,7 @@ from django.db.models.functions import JSONObject
 
 from core.base.models import BaseManager, BaseQuerySet
 from store.exceptions import IndeletableStore
-from store.models.abstract import Socials, StorePolicies
+from store.models.abstract import Socials, StorePolicies, SEO
 
 
 class CartQuerySet(BaseQuerySet):
@@ -55,7 +55,15 @@ class StoreQuerySet(BaseQuerySet):
         """
         Store is singleton, first should be the only instance
         """
-        REQUIRED_FIELDS = ("policies", "socials", "name", "logo", "favicon", "address")
+        REQUIRED_FIELDS = (
+            "policies",
+            "socials",
+            "name",
+            "logo",
+            "favicon",
+            "address",
+            "seo",
+        )
 
         return (
             self.annotate(
@@ -71,6 +79,9 @@ class StoreQuerySet(BaseQuerySet):
                         field.name: F(field.name)
                         for field in Socials._meta.local_fields
                     }
+                ),
+                seo=JSONObject(
+                    **{field.name: F(field.name) for field in SEO._meta.local_fields}
                 ),
             )
             .values(*REQUIRED_FIELDS)

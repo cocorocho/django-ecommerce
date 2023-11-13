@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from core.base.serializers import DynamicFieldsModelSerializer
 from products.models import Category, SubCategory, Product, ProductImage
+from store.utils import create_seo_description
 
 
 class SubCategorySerializer(serializers.ModelSerializer):
@@ -44,6 +45,8 @@ class StoreProductSerializer(DynamicFieldsModelSerializer):
 
 
 class StoreProductDetailSerializer(StoreProductSerializer):
+    description_short = serializers.SerializerMethodField()
+
     class Meta(StoreProductSerializer.Meta):
         fields = (
             "id",
@@ -54,7 +57,11 @@ class StoreProductDetailSerializer(StoreProductSerializer):
             "slug",
             "images",
             "description",
+            "description_short",
             "description_rich",
             "in_stock",
             "thumbnail",
         )
+
+    def get_description_short(self, obj: Product) -> str:
+        return create_seo_description(obj.description)

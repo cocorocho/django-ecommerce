@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.text import slugify
 
 from core.base.models import BaseModel, SingletonModel
-from store.models.abstract import StorePolicies, Socials
+from store.models.abstract import StorePolicies, Socials, SEO
 from store.querysets import StoreManager, StoreQuerySet
 from store.exceptions import IndeletableStore
 from products.models import Product
@@ -38,6 +38,7 @@ class FeaturedProducts(BaseModel):
 class Store(
     Socials,
     StorePolicies,
+    SEO,
     SingletonModel,
     BaseModel,
 ):
