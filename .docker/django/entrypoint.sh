@@ -3,9 +3,6 @@
 # Run migrations
 python manage.py migrate --no-input
 
-# Populate Cities-Light
-python manage.py cities_light
-
 # Collect static files
 python manage.py collectstatic --no-input
 

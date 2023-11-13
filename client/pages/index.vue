@@ -28,8 +28,8 @@ const { data: storeMetaData } = await useAsyncData("storeMetaData", async () => 
 useSeoMeta({
   title: storeMetaData.value?.name,
   ogTitle: storeMetaData.value?.name,
-  description: storeMetaData.value?.seo.description,
-  ogDescription: storeMetaData.value?.seo.description
+  description: storeMetaData.value?.seo?.description,
+  ogDescription: storeMetaData.value?.seo?.description
 });
 </script>
 
@@ -41,7 +41,7 @@ useSeoMeta({
 
 #hero::before {
   content: "";
-  background-image: url('~/public/hero.jpg');
+  background-image: url('/hero.jpg');
   background-size: cover;
   z-index: -1;
   height: 100%;

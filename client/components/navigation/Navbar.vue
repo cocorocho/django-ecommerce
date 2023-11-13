@@ -10,7 +10,7 @@
         class: 'no-underline'
       },
       button: {
-        class: 'md:hidden justify-start'
+        class: 'md:hidden justify-center'
       },
       end: {
         class: 'basis-2/3'

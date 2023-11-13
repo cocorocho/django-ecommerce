@@ -1,3 +1,6 @@
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http.response import HttpResponse
+
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from cities_light.models import Country
 
@@ -14,3 +17,11 @@ class CountryViewSet(ReadOnlyModelViewSet):
             return CountryDetailsSerializer
 
         return super().get_serializer_class()
+
+
+@ensure_csrf_cookie
+def set_csrf_token(request) -> HttpResponse:
+    """
+    Set CSRF Token
+    """
+    return HttpResponse()

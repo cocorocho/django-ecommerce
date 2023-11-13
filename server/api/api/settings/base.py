@@ -100,25 +100,14 @@ WSGI_APPLICATION = "api.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.getenv("DB_NAME"),
-#         "USER": os.getenv("DB_USER"),
-#         "PASSWORD": os.getenv("DB_PASSWORD"),
-#         "HOST": os.getenv("DB_HOST", "localhost"),
-#         "PORT": os.getenv("DB_PORT", 5432),
-#     }
-# }
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "db.sqlite3",
-        # "USER": os.getenv("DB_USER"),
-        # "PASSWORD": os.getenv("DB_PASSWORD"),
-        # "HOST": os.getenv("DB_HOST", "localhost"),
-        # "PORT": os.getenv("DB_PORT", 5432),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", 5432),
     }
 }
 
@@ -181,7 +170,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 DJOSER = {
     "USER_CREATE_PASSWORD_RETYPE": True,
-    "PASSWORD_RESET_CONFIRM_URL": "account/recover/{uid}/{token}/",  # TODO add frontend url
+    "PASSWORD_RESET_CONFIRM_URL": FRONTEND_URL + "/account/recover/{uid}/{token}/",
     "EMAIL": {"password_reset": "accounts.email.PasswordResetEmail"},
     "PERMISSIONS": {"user_list": ["rest_framework.permissions.IsAdminUser"]},
 }

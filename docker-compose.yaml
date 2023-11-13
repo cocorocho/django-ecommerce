@@ -21,6 +21,8 @@ services:
       dockerfile: ./.docker/django/Dockerfile
       target: production
     entrypoint: /entrypoint.sh
+    environment:
+      - ENVIRONMENT=production
     restart: always
     env_file:
       - .env

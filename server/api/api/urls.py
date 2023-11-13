@@ -21,7 +21,7 @@ from django.urls import path, include
 
 from rest_framework.routers import SimpleRouter
 
-from core.views.geo import CountryViewSet
+from core.views.geo import CountryViewSet, set_csrf_token
 
 
 geo_router = SimpleRouter()
@@ -31,6 +31,8 @@ from cities_light.contrib.restframework3 import router as cities_router
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # CSRF
+    path("set-csrf/", set_csrf_token),
     # Django-Cities-Light
     path("geo/", include(geo_router.urls)),
     # Accounts
