@@ -4,17 +4,6 @@
       <CatalogFeatured />
     </section>
     <section id="hero">
-        <div
-          style="filter: none;"
-        >
-          <NuxtLink
-            to="catalog/guitbass/"
-          >
-            <PrimeButton>
-              {{ $t('store.shopNow') }}
-            </PrimeButton>
-          </NuxtLink>
-        </div>
     </section>
   </LayoutContainer>
 </template>

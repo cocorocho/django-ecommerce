@@ -1,13 +1,23 @@
 server {
     listen 80;
-    server_name ${DJANGO_DOMAIN_NAME};
+    server_name ${DOMAIN};
 
     include /etc/nginx/mime.types;
 
-    location / {
-        proxy_pass http://django:8000;
+    location /api {
+        return 302 $uri/;
+    }
+
+    location /api/ {
+        proxy_pass http://django:8000/;
         proxy_set_header Host            $host;
         proxy_set_header X-Forwarded-For $remote_addr;
+    }
+
+    location / {
+        proxy_pass http://nuxt:3000;
+        proxy_set_header Host               $host;
+        proxy_set_header X-Forwarded-For    $remote_addr;
     }
 
     location /static/ {
@@ -17,17 +27,7 @@ server {
     location /media/ {
         root /var/www;
     }
-}
 
-server {
-    listen 80;
-    server_name ${NUXT_DOMAIN_NAME};
-
-    include /etc/nginx/mime.types;
-
-    location / {
-        proxy_pass http://nuxt:3000;
-        proxy_set_header Host               $host;
-        proxy_set_header X-Forwarded-For    $remote_addr;
-    }
+    access_log /var/log/nginx/django-ecommerce-access.log;
+    error_log /var/log/nginx/django-ecommerce-error.log;
 }

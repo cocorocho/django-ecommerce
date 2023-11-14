@@ -31,11 +31,10 @@ SECRET_KEY = "django-insecure-s(23j%n1r^55e7*jkmv5n1(%+z^13qwkb0utqzn7cl1(duu#5!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-FRONTEND_URL = os.getenv("NUXT_URL", "localhost:3000")
-DJANGO_URL = os.getenv("DJANGO_URL")
-DJANGO_FULL_URL = os.getenv("DJANGO_DOMAIN_NAME")
+DOMAIN = os.getenv("DOMAIN", "localhost:3000")
+FRONTEND_URL = f"https://{DOMAIN}"
 
-ALLOWED_HOSTS = [DJANGO_FULL_URL]
+ALLOWED_HOSTS = [DOMAIN]
 
 # Application definition
 
@@ -47,7 +46,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Libraries
-    "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",
@@ -64,7 +62,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -78,10 +75,7 @@ ROOT_URLCONF = "api.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            # BASE_DIR / "templates",
-            # BASE_DIR / "accounts" / "templates"
-        ],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -175,15 +169,9 @@ DJOSER = {
     "PERMISSIONS": {"user_list": ["rest_framework.permissions.IsAdminUser"]},
 }
 
-# CORS
-CORS_ALLOWED_ORIGINS = [
-    FRONTEND_URL,
-]
-
 # AUTH
 SESSION_COOKIE_HTTPONLY = True
-CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = [
-    FRONTEND_URL,
-    DJANGO_URL,
-]
+CSRF_TRUSTED_ORIGINS = [f"http://{DOMAIN}", f"https://{DOMAIN}"]
+
+# NGINX
+FORCE_SCRIPT_NAME = "/api"

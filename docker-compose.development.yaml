@@ -49,10 +49,29 @@ services:
     env_file:
       - .env
     environment:
-      - NUXT_URL
       - DJANGO_URL
     ports:
       - 3000:3000
+
+  nginx:
+    container_name: ecommerce-nginx
+    build:
+      context: .
+      dockerfile: ./.docker/nginx/Dockerfile
+    depends_on:
+      - django
+      - nuxt
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template
+      - shared-volume:/var/www
+    env_file:
+      - .env
+    environment:
+      - DOMAIN
+      - DJANGO_URL
+    ports:
+      - 8008:80
+    restart: always
 
 volumes:
   shared-volume:

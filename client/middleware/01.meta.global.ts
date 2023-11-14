@@ -5,5 +5,5 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   await storeMeta.fetchStoreData();
 
   // Get CSRF Token
-  await useFetchApi("set-csrf/", { method: "GET" });
+  await useApiFetch("set-csrf/");
 });

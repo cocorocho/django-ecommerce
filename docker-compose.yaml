@@ -45,7 +45,6 @@ services:
     depends_on:
       - django
     environment:
-      - NUXT_URL
       - DJANGO_URL
 
   nginx:
@@ -62,8 +61,7 @@ services:
     env_file:
       - .env
     environment:
-      - NUXT_URL
-      - DJANGO_URL
+      - DOMAIN
 
 volumes:
   shared-volume:

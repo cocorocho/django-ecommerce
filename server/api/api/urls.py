@@ -21,7 +21,8 @@ from django.urls import path, include
 
 from rest_framework.routers import SimpleRouter
 
-from core.views.geo import CountryViewSet, set_csrf_token
+from core.views.geo import CountryViewSet
+from core.views.core import set_csrf_token
 
 
 geo_router = SimpleRouter()
