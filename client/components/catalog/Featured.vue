@@ -1,38 +1,61 @@
 <template>
-  <PrimeCarousel
-    v-if="products && products.length"
-    container-class="md:px-8 relative"
-    :value="products"
-    :pt="{
-      item: { class: 'flex justify-center' },
-      nextButton: {
-        class: 'absolute sm:relative z-[1] -right-2',
-      },
-      previousButton: {
-        class: 'absolute sm:relative z-[1] -left-2',
-      }
-    }"
-    :numVisible="3"
-    :responsiveOptions="carouselSettings"
-    :showIndicators="false"
-    :autoplayInterval="10000"
-    :circular="true"
-  >
-    <template #item="{ data }">
-      <NuxtLink :to="{ name: 'catalogFeatured', params: { slug: data.slug }}" class="w-full">
-        <div class="px-w lg:px-4">
-          <div class="featured-card">
-            <h2 class="featured-item-header">
-              {{ data.header }}
-            </h2>
-            <NuxtImg :src="buildMediaUrl(data.image)"
-              sizes="200px md:500px lg:800px"
-            />
+  <div class="min-h-[250]">
+    <ClientOnly>
+      <template #fallback>
+        <div class="flex">
+          <div class="p-4 w-full mx-auto">
+            <div class="animate-pulse flex space-x-4 bg-blue-300 justify-center p-2 rounded-lg">
+              <NuxtImg src="placeholder.svg" height="160"/>
+            </div>
+          </div>
+          <div class="p-4 w-full mx-auto ">
+            <div class="animate-pulse flex space-x-4 bg-blue-300 justify-center p-2 rounded-lg">
+              <NuxtImg src="placeholder.svg" height="160"/>
+            </div>
+          </div>
+          <div class="p-4 w-full mx-auto hidden md:block">
+            <div class="animate-pulse flex space-x-4 bg-blue-300 justify-center p-2 rounded-lg">
+              <NuxtImg src="placeholder.svg" height="160"/>
+            </div>
           </div>
         </div>
-      </NuxtLink>
-    </template>
-  </PrimeCarousel>
+      </template>
+      <PrimeCarousel
+        v-if="products && products.length"
+        container-class="md:px-8 relative"
+        :value="products"
+        :pt="{
+          item: { class: 'flex justify-center' },
+          nextButton: {
+            class: 'absolute sm:relative z-[1] -right-2',
+          },
+          previousButton: {
+            class: 'absolute sm:relative z-[1] -left-2',
+          }
+        }"
+        :numVisible="3"
+        :responsiveOptions="carouselSettings"
+        :showIndicators="false"
+        :autoplayInterval="10000"
+        :circular="true"
+      >
+        <template #item="{ data }">
+          <NuxtLink :to="{ name: 'catalogFeatured', params: { slug: data.slug }}" class="w-full">
+            <div class="px-2 lg:px-4">
+              <div class="featured-card">
+                <h2 class="featured-item-header">
+                  {{ data.header }}
+                </h2>
+                <NuxtImg :src="buildMediaUrl(data.image)"
+                  sizes="200px md:500px lg:800px"
+                />
+              </div>
+            </div>
+          </NuxtLink>
+        </template>
+      </PrimeCarousel>
+    </ClientOnly>
+  </div>
 </template>
 
 <script setup lang="ts">
