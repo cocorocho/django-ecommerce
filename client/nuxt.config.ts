@@ -24,7 +24,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiURL: process.env.DJANGO_URL ?? "http://localhost:8000"
+      apiURL: process.env.DJANGO_URL ?? "http://localhost:8000",
+      mediaURL: process.env.MEDIA_URL ?? "http://localhost:8000"
     }
   },
   image: {

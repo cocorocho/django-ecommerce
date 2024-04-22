@@ -3,6 +3,9 @@ FROM node:21-slim as base
 ARG DJANGO_URL
 ENV DJANGO_URL=${DJANGO_URL}
 
+ARG MEDIA_URL
+ENV MEDIA_URL=${MEDIA_URL}
+
 WORKDIR /code
 COPY ./client .
 

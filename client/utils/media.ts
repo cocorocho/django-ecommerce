@@ -1,5 +1,11 @@
 export const buildMediaUrl = (url: string) => {
   const config = useRuntimeConfig();
-  const fullUrl: string = config.public.apiURL + "/media/" + url;
+  let mediaURL: string = config.public.mediaURL;
+
+  if (!mediaURL.endsWith("/")) {
+    mediaURL += "/";
+  }
+
+  const fullUrl: string = config.public.mediaURL + url;
   return fullUrl;
 }
